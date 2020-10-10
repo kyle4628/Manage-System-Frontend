@@ -67,7 +67,6 @@ export default {
   navbar: {
     dashboard: '首頁',
     logOut: '使用者登出',
-    theme: '换肤',
     size: '布局大小'
   },
   login: {
@@ -105,6 +104,24 @@ export default {
     backToTopTips1: '页面滚动到指定位置会在右下角出现返回顶部按钮',
     backToTopTips2: '可自定义按钮的样式、show/hide、出现的高度、返回的位置 如需文字提示，可在外部使用Element的el-tooltip元素',
     imageUploadTips: '由于我在使用时它只有vue@1版本，而且和mockjs不兼容，所以自己改造了一下，如果大家要使用的话，优先还是使用官方版本。'
+  },
+  member: {
+    searchTitle: '請輸入搜尋項目',
+    searchItem: '搜尋項目',
+    memberStatus: '會員身分',
+    id: '會員ID',
+    name: '姓名',
+    email: 'E-mail',
+    authority: '權限',
+    password: '密碼',
+    created: '建立時間',
+    updated: '更新時間',
+    reviewer: '管理員',
+    search: '搜尋',
+    add: '新增',
+    actions: '操作',
+    edit: '編輯',
+    delete: '刪除'
   },
   table: {
     dynamicTips1: '固定表头, 按照表头顺序排序',

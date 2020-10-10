@@ -24,7 +24,7 @@ export default {
   },
   data() {
     return {
-      title: 'Vue Element Admin',
+      title: 'Listoo',
       logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png'
     }
   }
@@ -46,8 +46,8 @@ export default {
   width: 100%;
   height: 50px;
   line-height: 50px;
-  background: #45d370;
-  text-align: center;
+  background: #aae7b5;
+  text-align: left;
   overflow: hidden;
 
   & .sidebar-logo-link {

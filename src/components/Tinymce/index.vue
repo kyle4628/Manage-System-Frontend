@@ -64,7 +64,7 @@ export default {
       fullscreen: false,
       languageTypeList: {
         'en': 'en',
-        'zh': 'zh_CN',
+        'zh': 'zh_TW',
         'es': 'es_MX',
         'ja': 'ja'
       }
