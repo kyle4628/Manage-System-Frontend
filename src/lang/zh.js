@@ -1,4 +1,8 @@
 export default {
+  common: {
+    idDescending: '按ID降冪排列',
+    idAscending: '按ID升冪排列'
+  },
   route: {
     dashboard: '首頁',
     members: '管理會員',
@@ -70,13 +74,10 @@ export default {
     size: '布局大小'
   },
   login: {
-    title: '系统登录',
-    logIn: '登录',
-    username: '账号',
-    password: '密码',
-    any: '随便填',
-    thirdparty: '第三方登录',
-    thirdpartyTips: '本地不能模拟，请结合自己业务进行模拟！！！'
+    title: '系统登入',
+    logIn: '登入',
+    username: '帳號',
+    password: '密碼'
   },
   documentation: {
     documentation: '文档',

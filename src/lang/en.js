@@ -1,4 +1,8 @@
 export default {
+  common: {
+    idDescending: 'ID Descending',
+    idAscending: 'ID Ascending'
+  },
   route: {
     dashboard: 'Dashboard',
     members: 'Members',
