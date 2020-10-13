@@ -134,6 +134,8 @@ export default {
     edit: 'Edit',
     delete: 'Delete'
   },
+  tag: {
+  },
   table: {
     dynamicTips1: 'Fixed header, sorted by header order',
     dynamicTips2: 'Not fixed header, sorted by click order',
