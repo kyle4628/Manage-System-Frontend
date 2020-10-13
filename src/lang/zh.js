@@ -8,6 +8,7 @@ export default {
     members: '管理會員',
     tags: '標籤管理',
     places: '地點管理',
+    placelists: '地圖清單',
     permission: '登入者權限',
     rolePermission: '角色权限',
     pagePermission: '页面权限',

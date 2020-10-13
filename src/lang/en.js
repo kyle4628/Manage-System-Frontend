@@ -8,6 +8,7 @@ export default {
     members: 'Members',
     tags: 'Tags',
     places: 'Places',
+    placelists: 'Place Lists',
     documentation: 'Documentation',
     guide: 'Guide',
     permission: 'Permission',

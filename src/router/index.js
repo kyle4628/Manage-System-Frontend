@@ -98,7 +98,7 @@ export const asyncRoutes = [
         path: 'index',
         component: () => import('@/views/members/index'),
         name: 'Members',
-        meta: { title: 'members', icon: 'pdf' }
+        meta: { title: 'members', icon: 'people' }
       }
     ]
   },
@@ -111,20 +111,50 @@ export const asyncRoutes = [
         path: 'index',
         component: () => import('@/views/tags/index'),
         name: 'Members',
-        meta: { title: 'tags', icon: 'pdf' }
+        meta: { title: 'tags', icon: 'tab' }
       }
     ]
   },
+  // {
+  //   path: '/places',
+  //   component: Layout,
+  //   redirect: '/places/index',
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/places/index'),
+  //       name: 'Members',
+  //       meta: { title: 'places', icon: 'pdf' }
+  //     }
+  //   ]
+  // },
   {
     path: '/places',
     component: Layout,
-    redirect: '/places/index',
+    redirect: '/places/place',
+    alwaysShow: true, // will always show the root menu
+    name: 'Places',
+    meta: {
+      title: 'places',
+      icon: 'list',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
     children: [
       {
-        path: 'index',
-        component: () => import('@/views/places/index'),
-        name: 'Members',
-        meta: { title: 'places', icon: 'pdf' }
+        path: 'places',
+        component: () => import('@/views/places/places'),
+        name: 'Places',
+        meta: {
+          title: 'places'
+        }
+      },
+      {
+        path: 'place-lists',
+        component: () => import('@/views/places/place-lists'),
+        name: 'Place-Lists',
+        meta: {
+          title: 'placelists'
+        }
       }
     ]
   },
