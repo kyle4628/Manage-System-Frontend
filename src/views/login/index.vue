@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container">
+  <div class="login-container div-gradient">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
 
       <div class="title-container">
@@ -234,6 +234,13 @@ $bg:#2d3a4b;
 $dark_gray:#889aa4;
 $light_gray:#eee;
 
+.div-gradient
+{
+background: linear-gradient(300deg, rgba(51, 120, 124, 1)30%, rgba(60, 50, 164, 0.7)70%);
+background: -moz-linear-gradient(300deg, rgba(51, 120, 124, 1)30%, rgba(60, 50, 164, 0.7)70%);
+background: -webkit-linear-gradient(300deg, rgba(51, 120, 124, 1)30%, rgba(60, 50, 164, 0.7)70%);
+background: -o-linear-gradient(300deg, rgba(51, 120, 124, 1)30%, rgba(60, 50, 164, 0.7)70%);
+}
 .login-container {
   min-height: 100%;
   width: 100%;

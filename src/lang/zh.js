@@ -125,6 +125,18 @@ export default {
     edit: '編輯',
     delete: '刪除'
   },
+  tag: {
+    searchTitle: 'Search',
+    searchItem: 'Item',
+    search: 'Search',
+    id: 'Tag ID',
+    name: 'Name',
+    type: 'Type',
+    actions: 'Actions',
+    add: 'Create',
+    edit: 'Edit',
+    delete: 'Delete'
+  },
   table: {
     dynamicTips1: '固定表头, 按照表头顺序排序',
     dynamicTips2: '不固定表头, 按照点击顺序排序',

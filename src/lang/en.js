@@ -135,6 +135,16 @@ export default {
     delete: 'Delete'
   },
   tag: {
+    searchTitle: 'Search',
+    searchItem: 'Item',
+    search: 'Search',
+    id: 'Tag ID',
+    name: 'Name',
+    type: 'Type',
+    actions: 'Actions',
+    add: 'Create',
+    edit: 'Edit',
+    delete: 'Delete'
   },
   table: {
     dynamicTips1: 'Fixed header, sorted by header order',
