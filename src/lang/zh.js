@@ -126,16 +126,32 @@ export default {
     delete: '刪除'
   },
   tag: {
-    searchTitle: 'Search',
-    searchItem: 'Item',
-    search: 'Search',
-    id: 'Tag ID',
-    name: 'Name',
-    type: 'Type',
-    actions: 'Actions',
-    add: 'Create',
-    edit: 'Edit',
-    delete: 'Delete'
+    searchTitle: '請輸入項目',
+    searchItem: '搜尋項目',
+    search: '搜尋',
+    id: '標籤 ID',
+    name: '名稱',
+    type: '種類',
+    actions: '操作',
+    add: '新增',
+    edit: '編輯',
+    delete: '刪除'
+  },
+  place: {
+    searchTitle: '請輸入項目',
+    searchItem: '搜尋項目',
+    search: '搜尋',
+    id: '地點 ID',
+    name: '清單名稱',
+    type: '種類',
+    phone: '電話',
+    address: '地址',
+    longitude: '經度',
+    latitude: '緯度',
+    actions: '操作',
+    add: '新增',
+    edit: '編輯',
+    delete: '刪除'
   },
   table: {
     dynamicTips1: '固定表头, 按照表头顺序排序',
@@ -187,8 +203,8 @@ export default {
   },
   settings: {
     title: '版面配置設定',
-    theme: '主题色',
-    tagsView: '开启 Tags-View',
+    theme: '主題色',
+    tagsView: '開啟 Tags-View',
     fixedHeader: '固定 Header',
     sidebarLogo: '顯示LOGO'
   }

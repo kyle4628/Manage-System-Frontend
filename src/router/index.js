@@ -13,8 +13,6 @@ import nestedRouter from './modules/nested'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
- * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
- *
  * hidden: true                   if set true, item will not show in the sidebar(default is false)
  * alwaysShow: true               if set true, will always show the root menu
  *                                if not set alwaysShow, when item has more than one children route,
@@ -84,10 +82,6 @@ export const constantRoutes = [
   }
 ]
 
-/**
- * asyncRoutes
- * the routes that need to be dynamically loaded based on user roles
- */
 export const asyncRoutes = [
   {
     path: '/members',
@@ -115,19 +109,6 @@ export const asyncRoutes = [
       }
     ]
   },
-  // {
-  //   path: '/places',
-  //   component: Layout,
-  //   redirect: '/places/index',
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/places/index'),
-  //       name: 'Members',
-  //       meta: { title: 'places', icon: 'pdf' }
-  //     }
-  //   ]
-  // },
   {
     path: '/places',
     component: Layout,
@@ -200,7 +181,6 @@ export const asyncRoutes = [
     ]
   },
 
-  /** when your routing map is too long, you can split it into small modules **/
   chartsRouter,
   nestedRouter,
   tableRouter,
@@ -318,7 +298,6 @@ const createRouter = () => new Router({
 
 const router = createRouter()
 
-// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router

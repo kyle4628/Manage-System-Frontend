@@ -39,7 +39,7 @@
       </el-table-column>
       <el-table-column :label="$t('member.name')" width="120px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.timestamp | parseTime('{y}-{m}-{d}') }}</span>
+          <span>{{ row.reviewer }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('member.email')" min-width="120px">

@@ -146,6 +146,22 @@ export default {
     edit: 'Edit',
     delete: 'Delete'
   },
+  place: {
+    searchTitle: 'Search',
+    searchItem: 'Item',
+    search: 'Search',
+    id: 'Place List ID',
+    name: 'Name',
+    type: 'Type',
+    phone: 'Phone',
+    address: 'Address',
+    longitude: 'Longitude',
+    latitude: 'Latitude',
+    actions: 'Actions',
+    add: 'Create',
+    edit: 'Edit',
+    delete: 'Delete'
+  },
   table: {
     dynamicTips1: 'Fixed header, sorted by header order',
     dynamicTips2: 'Not fixed header, sorted by click order',
