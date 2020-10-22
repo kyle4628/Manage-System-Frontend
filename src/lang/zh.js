@@ -123,7 +123,10 @@ export default {
     add: '新增',
     actions: '操作',
     edit: '編輯',
-    delete: '刪除'
+    delete: '刪除',
+    administrator: '管理員',
+    normal: '一般身分',
+    deleted: '已刪會員'
   },
   tag: {
     searchTitle: '請輸入項目',
@@ -142,13 +145,29 @@ export default {
     searchItem: '搜尋項目',
     search: '搜尋',
     id: '地點 ID',
-    name: '清單名稱',
+    name: '地點名稱',
     type: '種類',
     phone: '電話',
     address: '地址',
     longitude: '經度',
     latitude: '緯度',
     actions: '操作',
+    add: '新增',
+    edit: '編輯',
+    delete: '刪除'
+  },
+  placeList: {
+    searchTitle: '請輸入項目',
+    searchItem: '搜尋項目',
+    search: '搜尋',
+    id: '清單 ID',
+    userId: '使用者 ID',
+    privacy: '開放權限',
+    name: '清單名稱',
+    description: '描述',
+    coverImageURL: '封面圖片網址',
+    createdTime: '建立時間',
+    updatedTime: '更新時間',
     add: '新增',
     edit: '編輯',
     delete: '刪除'

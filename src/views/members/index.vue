@@ -6,7 +6,7 @@
         <el-option v-for="item in searchItem" :key="item" :label="item" :value="item" />
       </el-select>
       <el-select v-model="listQuery.type" :placeholder="$t('member.memberStatus')" clearable class="filter-item" style="width: 130px;margin-left:10px;">
-        <el-option v-for="item in memberAuthority" :key="item.key" :label="item.display_name" :value="item.key" />
+        <el-option v-for="item in memberAuthority" :key="item" :label="item" :value="item" />
       </el-select>
       <el-select v-model="listQuery.sort" style="width: 140px;margin-left:10px;" class="filter-item" @change="handleFilter">
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
@@ -84,7 +84,7 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="25%">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="80px" style="width: 300px; margin-left:50px;">
         <el-form-item :label="$t('member.name')" prop="title">
           <el-input v-model="temp.title" />
@@ -94,7 +94,7 @@
         </el-form-item>
         <el-form-item :label="$t('member.authority')" prop="type">
           <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in memberAuthority" :key="item.key" :label="item.display_name" :value="item.key" />
+            <el-option v-for="item in memberAuthority" :key="item" :label="item" :value="item" />
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('member.created')" prop="timestamp">
@@ -139,11 +139,11 @@ const calendarTypeOptions = [
   { key: 'EU', display_name: 'Eurozone' }
 ]
 
-const memberAuthority = [
-  { key: 'Normal', display_name: 'Normal' },
-  { key: 'Administrator', display_name: 'Administrator' },
-  { key: 'Deleted', display_name: 'Deleted' }
-]
+// const memberAuthority = [
+//   { key: 'Normal', display_name: 'Normal' },
+//   { key: 'Administrator', display_name: 'Administrator' },
+//   { key: 'Deleted', display_name: 'Deleted' }
+// ]
 
 // arr to obj, such as { CN : "China", US : "USA" }
 const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
@@ -183,7 +183,7 @@ export default {
         sort: '+id'
       },
       searchItem: [this.$t('member.name'), this.$t('member.email')],
-      memberAuthority,
+      memberAuthority: [this.$t('member.administrator'), this.$t('member.normal'), this.$t('member.deleted')],
       sortOptions: [{ label: this.$t('common.idAscending'), key: '+id' }, { label: this.$t('common.idDescending'), key: '-id' }],
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,

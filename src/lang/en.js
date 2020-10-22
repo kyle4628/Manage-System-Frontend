@@ -132,7 +132,10 @@ export default {
     actions: 'Actions',
     add: 'Create',
     edit: 'Edit',
-    delete: 'Delete'
+    delete: 'Delete',
+    administrator: 'Administrator',
+    normal: 'Normal',
+    deleted: 'Deleted'
   },
   tag: {
     searchTitle: 'Search',
@@ -150,7 +153,7 @@ export default {
     searchTitle: 'Search',
     searchItem: 'Item',
     search: 'Search',
-    id: 'Place List ID',
+    id: 'Place ID',
     name: 'Name',
     type: 'Type',
     phone: 'Phone',
@@ -158,6 +161,22 @@ export default {
     longitude: 'Longitude',
     latitude: 'Latitude',
     actions: 'Actions',
+    add: 'Create',
+    edit: 'Edit',
+    delete: 'Delete'
+  },
+  placeList: {
+    searchTitle: 'Search',
+    searchItem: 'Item',
+    search: 'Search',
+    id: 'List ID',
+    userId: 'User ID',
+    privacy: 'Privacy',
+    name: 'List Name',
+    description: 'Description',
+    coverImageURL: 'Cover Image URL',
+    createdTime: 'Create Time',
+    updatedTime: 'Update Time',
     add: 'Create',
     edit: 'Edit',
     delete: 'Delete'

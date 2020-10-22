@@ -26,7 +26,7 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column :label="$t('place.id')" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column :label="$t('place.id')" prop="id" sortable="custom" align="center" width="100" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
         </template>
@@ -36,9 +36,9 @@
           <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('place.type')" min-width="150px">
+      <el-table-column :label="$t('place.type')" width="150px" align="center">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>
+          <span class="link-type" @click="handleUpdate(row)">{{ row.author }}</span>
           <el-tag>{{ row.type | typeFilter }}</el-tag>
         </template>
       </el-table-column>
@@ -47,22 +47,22 @@
           <span>{{ row.author }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('place.address')" width="110px" align="center">
+      <el-table-column :label="$t('place.address')" min-width="200px">
+        <template slot-scope="{row}">
+          <span>{{ row.title }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('place.longitude')" width="200px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.author }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('place.longitude')" width="110px" align="center">
+      <el-table-column :label="$t('place.latitude')" width="200px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.author }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('place.latitude')" width="110px" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.author }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('table.actions')" align="center" width="210" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button type="primary" @click="handleUpdate(row)">
             {{ $t('table.edit') }}
@@ -76,29 +76,27 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item :label="$t('table.type')" prop="type">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="30%">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="90px" style="width: 400px; margin-left:40px;">
+        <el-form-item :label="$t('place.name')" prop="name">
+          <el-input v-model="temp.title" />
+        </el-form-item>
+        <el-form-item :label="$t('place.type')" prop="type">
           <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
             <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
           </el-select>
         </el-form-item>
-        <el-form-item :label="$t('table.date')" prop="timestamp">
-          <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date" />
-        </el-form-item>
-        <el-form-item :label="$t('table.title')" prop="title">
+        <el-form-item :label="$t('place.phone')" prop="phone">
           <el-input v-model="temp.title" />
         </el-form-item>
-        <el-form-item :label="$t('table.status')">
-          <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
-          </el-select>
+        <el-form-item :label="$t('place.address')" prop="address">
+          <el-input v-model="temp.title" />
         </el-form-item>
-        <el-form-item :label="$t('table.importance')">
-          <el-rate v-model="temp.importance" :colors="['#99A9BF', '#F7BA2A', '#FF9900']" :max="3" style="margin-top:8px;" />
+        <el-form-item :label="$t('place.longitude')" prop="longitude">
+          <el-input v-model="temp.title" />
         </el-form-item>
-        <el-form-item :label="$t('table.remark')">
-          <el-input v-model="temp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
+        <el-form-item :label="$t('place.latitude')" prop="latitude">
+          <el-input v-model="temp.title" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -196,9 +194,12 @@ export default {
       dialogPvVisible: false,
       pvData: [],
       rules: {
-        type: [{ required: true, message: 'type is required', trigger: 'change' }],
-        timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        title: [{ required: true, message: 'title is required', trigger: 'blur' }]
+        type: [{ type: 'string', required: true, message: 'Type is required', trigger: 'blur' }],
+        name: [{ type: 'string', required: true, message: 'List name is required', trigger: 'blur' }],
+        // phone: [{ required: true, message: 'Phone is required', trigger: 'blur' }],
+        address: [{ type: 'string', required: true, message: 'Address is required', trigger: 'blur' }],
+        longitude: [{ type: 'string', required: true, message: 'Longitude is required', trigger: 'blur' }],
+        latitude: [{ type: 'string', required: true, message: 'Latitude is required', trigger: 'blur' }]
       },
       downloadLoading: false
     }

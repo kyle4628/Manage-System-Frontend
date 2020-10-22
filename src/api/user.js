@@ -22,3 +22,11 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function testLogout() {
+  return request({
+    url: '/auth/logout',
+    method: 'post',
+    baseURL: 'http://localhost:57680'
+  })
+}
