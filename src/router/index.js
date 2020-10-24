@@ -8,8 +8,8 @@ import Layout from '@/layout'
 
 /* Router Modules */
 import chartsRouter from './modules/charts'
-import tableRouter from './modules/table'
-import nestedRouter from './modules/nested'
+// import tableRouter from './modules/table'
+// import nestedRouter from './modules/nested'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -182,8 +182,8 @@ export const asyncRoutes = [
   },
 
   chartsRouter,
-  nestedRouter,
-  tableRouter,
+  // nestedRouter,
+  // tableRouter,
 
   {
     path: '/example',
@@ -271,19 +271,6 @@ export const asyncRoutes = [
     path: '/pdf/download',
     component: () => import('@/views/pdf/download'),
     hidden: true
-  },
-
-  {
-    path: '/i18n',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/i18n-demo/index'),
-        name: 'I18n',
-        meta: { title: 'i18n', icon: 'international' }
-      }
-    ]
   },
 
   // 404 page must be placed at the end !!!

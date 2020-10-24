@@ -33,7 +33,7 @@ export default {
     keyboardChart: '方塊圖',
     lineChart: '折線圖',
     mixChart: '綜合圖表',
-    example: '综合实例',
+    example: '文章管理',
     nested: '路由嵌套',
     menu1: '菜单1',
     'menu1-1': '菜单 1-1',
@@ -48,8 +48,8 @@ export default {
     complexTable: '综合 Table',
     tab: 'Tab',
     form: '表单',
-    createArticle: '创建文章',
-    editArticle: '编辑文章',
+    createArticle: '新增文章',
+    editArticle: '編輯文章',
     articleList: '文章列表',
     errorPages: '错误页面',
     page401: '401',
@@ -207,9 +207,9 @@ export default {
     documentation: '文档介绍'
   },
   excel: {
-    export: '导出',
-    selectedExport: '导出已选择项',
-    placeholder: '请输入文件名(默认excel-list)'
+    export: '匯出',
+    selectedExport: '匯出已選項目',
+    placeholder: '請輸入文件名'
   },
   pdf: {
     tips: '这里使用   window.print() 来实现下载pdf的功能'

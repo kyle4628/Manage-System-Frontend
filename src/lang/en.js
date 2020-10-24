@@ -35,7 +35,7 @@ export default {
     keyboardChart: 'Keyboard Chart',
     lineChart: 'Line Chart',
     mixChart: 'Mix Chart',
-    example: 'Example',
+    example: 'Article',
     nested: 'Nested Routes',
     menu1: 'Menu 1',
     'menu1-1': 'Menu 1-1',
