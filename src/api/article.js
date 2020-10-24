@@ -39,3 +39,11 @@ export function updateArticle(data) {
     data
   })
 }
+
+export function testPlaceList() {
+  return request({
+    url: '/test/get_place_list',
+    method: 'post',
+    baseURL: 'http://localhost:57680'
+  })
+}

@@ -33,39 +33,39 @@
       </el-table-column>
       <el-table-column :label="$t('placeList.userId')" width="100px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.timestamp | parseTime('{y}-{m}-{d}') }}</span>
+          <span>{{ row.user_id }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('placeList.privacy')" width="80px">
         <template slot-scope="{row}">
-          <svg-icon v-for="n in +row.importance" :key="n" icon-class="star" class="meta-item__icon" />
+          <svg-icon v-for="n in +row.privacy+1" :key="n" icon-class="star" class="meta-item__icon" />
         </template>
       </el-table-column>
       <el-table-column :label="$t('placeList.name')" width="110px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.author }}</span>
+          <span>{{ row.listName }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('placeList.description')" min-width="80px">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>
-          <el-tag>{{ row.type | typeFilter }}</el-tag>
+          <span class="link-type" @click="handleUpdate(row)">{{ row.description }}</span>
+          <!-- <el-tag>{{ row.description }}</el-tag> -->
         </template>
       </el-table-column>
-      <el-table-column :label="$t('placeList.coverImageURL')" align="center" width="180px">
+      <!-- <el-table-column :label="$t('placeList.coverImageURL')" align="center" width="180px">
         <template slot-scope="{row}">
-          <span v-if="row.pageviews" class="link-type" @click="handleFetchPv(row.pageviews)">{{ row.pageviews }}</span>
+          <span v-if="row.coverImageURL" class="link-type" @click="handleFetchPv(row.pageviews)">{{ row.pageviews }}</span>
           <span v-else>0</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column :label="$t('placeList.createdTime')" width="150px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ row.createdTime }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('placeList.updatedTime')" width="150px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ row.updatedTime }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
@@ -117,22 +117,12 @@
       </div>
     </el-dialog>
 
-    <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
-      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
-        <el-table-column prop="key" label="Channel" />
-        <el-table-column prop="pv" label="Pv" />
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">{{ $t('table.confirm') }}</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
+import { fetchList, createArticle, updateArticle, testPlaceList } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
-import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 const calendarTypeOptions = [
@@ -149,7 +139,7 @@ const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
 }, {})
 
 export default {
-  name: 'ComplexTable',
+  name: 'PlacesListTable',
   components: { Pagination },
   directives: { waves },
   filters: {
@@ -174,9 +164,10 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
+        user_id: undefined,
+        privacy: undefined,
+        listName: undefined,
+        description: undefined,
         sort: '+id'
       },
       importanceOptions: [1, 2, 3],
@@ -211,13 +202,15 @@ export default {
   },
   created() {
     this.getList()
+    this.testList()
   },
   methods: {
     getList() {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.total = response.data.total
+        // console.log(response.data)
+        // this.list = response.data.items
+        // this.total = response.data.total
 
         // Just to simulate the time of the request
         setTimeout(() => {
@@ -225,9 +218,17 @@ export default {
         }, 1.5 * 1000)
       })
     },
+    testList() {
+      // this.listLoading = true
+      testPlaceList().then(response => {
+        this.list = response.data
+        this.total = response.total
+        // console.log(this.total)
+      })
+    },
     handleFilter() {
       this.listQuery.page = 1
-      this.getList()
+      this.list.reverse()
     },
     handleModifyStatus(row, status) {
       this.$message({
@@ -323,35 +324,6 @@ export default {
         duration: 2000
       })
       this.list.splice(index, 1)
-    },
-    handleFetchPv(pv) {
-      fetchPv(pv).then(response => {
-        this.pvData = response.data.pvData
-        this.dialogPvVisible = true
-      })
-    },
-    handleDownload() {
-      this.downloadLoading = true
-      import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-        const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
-        const data = this.formatJson(filterVal)
-        excel.export_json_to_excel({
-          header: tHeader,
-          data,
-          filename: 'table-list'
-        })
-        this.downloadLoading = false
-      })
-    },
-    formatJson(filterVal) {
-      return this.list.map(v => filterVal.map(j => {
-        if (j === 'timestamp') {
-          return parseTime(v[j])
-        } else {
-          return v[j]
-        }
-      }))
     },
     getSortClass: function(key) {
       const sort = this.listQuery.sort

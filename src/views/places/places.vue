@@ -211,6 +211,7 @@ export default {
     getList() {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
+        console.log(response.data.items)
         this.list = response.data.items
         this.total = response.data.total
 
@@ -350,6 +351,7 @@ export default {
     },
     getSortClass: function(key) {
       const sort = this.listQuery.sort
+      console.log(sort)
       return sort === `+${key}` ? 'ascending' : 'descending'
     }
   }
