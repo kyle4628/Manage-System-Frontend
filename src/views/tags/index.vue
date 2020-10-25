@@ -58,14 +58,14 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="30%">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="50px" style="width: 400px; margin-left:50px;">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="50px" style="width: 300px; margin-left:50px;">
+        <el-form-item :label="$t('tag.name')" prop="title">
+          <el-input v-model="temp.title" />
+        </el-form-item>
         <el-form-item :label="$t('tag.type')" prop="type">
           <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
             <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
           </el-select>
-        </el-form-item>
-        <el-form-item :label="$t('tag.name')" prop="title">
-          <el-input v-model="temp.title" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" align="center">

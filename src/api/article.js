@@ -42,7 +42,7 @@ export function updateArticle(data) {
 
 export function testPlaceList() {
   return request({
-    url: '/test/get_place_list',
+    url: '/query/get_place_list',
     method: 'post',
     baseURL: 'http://localhost:57680'
   })
