@@ -40,10 +40,27 @@ export function updateArticle(data) {
   })
 }
 
+export function queryTagList() {
+  return request({
+    url: '/query/get_tag_list',
+    method: 'post',
+    baseURL: 'http://localhost:57680'
+  })
+}
+
 export function testPlaceList() {
   return request({
     url: '/query/get_place_list',
     method: 'post',
+    baseURL: 'http://localhost:57680'
+  })
+}
+
+export function updatePlaceList(data) {
+  return request({
+    url: '/query/update_placelist',
+    method: 'post',
+    data,
     baseURL: 'http://localhost:57680'
   })
 }

@@ -86,11 +86,11 @@ export const asyncRoutes = [
   {
     path: '/members',
     component: Layout,
-    redirect: '/members/index',
+    redirect: '/members/members',
     children: [
       {
-        path: 'index',
-        component: () => import('@/views/members/index'),
+        path: 'members',
+        component: () => import('@/views/members/members'),
         name: 'Members',
         meta: { title: 'members', icon: 'people' }
       }
@@ -104,7 +104,7 @@ export const asyncRoutes = [
       {
         path: 'index',
         component: () => import('@/views/tags/index'),
-        name: 'Members',
+        name: 'Members_Table',
         meta: { title: 'tags', icon: 'tab' }
       }
     ]
@@ -124,7 +124,7 @@ export const asyncRoutes = [
       {
         path: 'places',
         component: () => import('@/views/places/places'),
-        name: 'Places',
+        name: 'Places_Table',
         meta: {
           title: 'places'
         }

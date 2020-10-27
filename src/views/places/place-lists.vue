@@ -30,9 +30,9 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('placeList.userId')" width="100px" align="center">
+      <el-table-column :label="$t('placeList.userName')" width="100px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.user_id }}</span>
+          <span>{{ row.user_name }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('placeList.privacy')" width="80px">
@@ -84,7 +84,10 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="40%">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="150px" style="width: 400px; margin-left:20px;">
         <el-form-item :label="$t('placeList.userId')" prop="timestamp">
-          <el-input v-model="temp.user_id" />
+          <el-input v-model="temp.user_id" disabled />
+        </el-form-item>
+        <el-form-item :label="$t('placeList.userName')" prop="timestamp">
+          <el-input v-model="temp.user_name" />
         </el-form-item>
         <el-form-item :label="$t('placeList.name')">
           <el-input v-model="temp.listName" />
@@ -110,7 +113,7 @@
 </template>
 
 <script>
-import { fetchList, createArticle, updateArticle, testPlaceList } from '@/api/article'
+import { fetchList, createArticle, testPlaceList, updatePlaceList } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -164,7 +167,9 @@ export default {
       sortOptions: [{ label: this.$t('common.idAscending'), key: '+id' }, { label: this.$t('common.idDescending'), key: '-id' }],
       showReviewer: false,
       temp: {
+        id: undefined,
         user_id: '',
+        user_name: '',
         listName: '',
         description: '',
         coverImageURL: ''
@@ -179,7 +184,7 @@ export default {
       pvData: [],
       rules: {
         type: [{ required: true, message: 'type is required', trigger: 'change' }],
-        timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
+        // timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
         title: [{ required: true, message: 'title is required', trigger: 'blur' }]
       },
       downloadLoading: false
@@ -239,12 +244,10 @@ export default {
     resetTemp() {
       this.temp = {
         id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        status: 'published',
-        type: ''
+        user_id: '',
+        listName: '',
+        description: '',
+        coverImageURL: ''
       }
     },
     handleCreate() {
@@ -275,9 +278,12 @@ export default {
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
+      console.log(this.temp)
       // this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
+      // const index = this.list.findIndex(v => v.id === this.temp.id)
+      // console.log(index)
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
@@ -286,11 +292,12 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
-          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateArticle(tempData).then(() => {
+          // tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+          updatePlaceList(tempData).then(() => {
             const index = this.list.findIndex(v => v.id === this.temp.id)
             this.list.splice(index, 1, this.temp)
             this.dialogFormVisible = false
+            this.testList()
             this.$notify({
               title: '成功',
               message: '更新成功',

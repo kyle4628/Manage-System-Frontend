@@ -1,19 +1,25 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" :placeholder="$t('tag.searchTitle')" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-select v-model="listQuery.importance" :placeholder="$t('tag.searchItem')" clearable style="width: 120px;margin-left:10px;" class="filter-item">
+      <el-input v-model="listQuery.title" :placeholder="$t('member.searchTitle')" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-select v-model="listQuery.importance" :placeholder="$t('member.searchItem')" clearable style="width: 120px;margin-left:10px;" class="filter-item">
         <el-option v-for="item in searchItem" :key="item" :label="item" :value="item" />
+      </el-select>
+      <el-select v-model="listQuery.type" :placeholder="$t('member.memberStatus')" clearable class="filter-item" style="width: 130px;margin-left:10px;">
+        <el-option v-for="item in memberAuthority" :key="item" :label="item" :value="item" />
       </el-select>
       <el-select v-model="listQuery.sort" style="width: 140px;margin-left:10px;" class="filter-item" @change="handleFilter">
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
       </el-select>
       <el-button v-waves class="filter-item" style="margin-left:10px;" type="primary" icon="el-icon-search" @click="handleFilter">
-        {{ $t('tag.search') }}
+        {{ $t('table.search') }}
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-        {{ $t('tag.add') }}
+        {{ $t('member.add') }}
       </el-button>
+      <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
+        {{ $t('member.reviewer') }}
+      </el-checkbox>
     </div>
 
     <el-table
@@ -26,57 +32,79 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column :label="$t('tag.id')" prop="id" sortable="custom" align="center" width="150" :class-name="getSortClass('id')">
+      <el-table-column :label="$t('member.id')" prop="id" sortable="custom" align="center" width="110" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('tag.placeName')" align="center">
+      <el-table-column :label="$t('member.name')" width="120px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.place_name }}</span>
+          <span>{{ row.reviewer }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('tag.tagName')" class-name="status-col">
+      <el-table-column :label="$t('member.email')" min-width="120px">
+        <template slot-scope="{row}">
+          <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>
+          <el-tag>{{ row.type | typeFilter }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column v-if="showReviewer" :label="$t('member.password')" width="110px" align="center">
+        <template slot-scope="{row}">
+          <span style="color:red;">{{ row.reviewer }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('member.created')" align="center" width="100px">
+        <template slot-scope="{row}">
+          <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('member.updated')" align="center" width="100px">
+        <template slot-scope="{row}">
+          <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('member.authority')" class-name="status-col" width="100">
         <template slot-scope="{row}">
           <el-tag :type="row.status | statusFilter">
-            {{ row.tag_name }}
+            {{ row.status }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('tag.userName')" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.user_name }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('tag.actions')" align="center" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('member.actions')" align="center" width="180" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button type="primary" @click="handleUpdate(row)">
-            {{ $t('tag.edit') }}
+          <el-button type="primary" size="small" @click="handleUpdate(row)">
+            {{ $t('member.edit') }}
           </el-button>
-          <el-button v-if="row.status!='deleted'" type="danger" @click="handleDelete(row,$index)">
-            {{ $t('tag.delete') }}
+          <el-button type="danger" size="small" @click="handleDelete(row,$index)">
+            {{ $t('member.delete') }}
           </el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="queryList" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="30%">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="80px" style="width: 400px; margin-left:20px;">
-        <el-form-item :label="$t('tag.placeName')" prop="title">
-          <el-input v-model="temp.author" disabled />
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="80px" style="width: 300px; margin-left:50px;">
+        <el-form-item :label="$t('member.name')" prop="title">
+          <el-input v-model="temp.title" />
         </el-form-item>
-        <el-form-item :label="$t('tag.tagName')" prop="type">
+        <el-form-item :label="$t('member.password')" prop="title">
+          <el-input v-model="temp.title" />
+        </el-form-item>
+        <el-form-item :label="$t('member.authority')" prop="type">
           <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
+            <el-option v-for="item in memberAuthority" :key="item" :label="item" :value="item" />
           </el-select>
         </el-form-item>
-        <el-form-item :label="$t('tag.userName')" prop="title">
-          <el-input v-model="temp.author" disabled />
+        <el-form-item :label="$t('member.created')" prop="timestamp">
+          <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date" />
+        </el-form-item>
+        <el-form-item :label="$t('member.updated')" prop="timestamp">
+          <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date" />
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer" align="center">
+      <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
           {{ $t('table.cancel') }}
         </el-button>
@@ -85,11 +113,21 @@
         </el-button>
       </div>
     </el-dialog>
+
+    <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
+      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
+        <el-table-column prop="key" label="Channel" />
+        <el-table-column prop="pv" label="Pv" />
+      </el-table>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogPvVisible = false">{{ $t('table.confirm') }}</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { fetchList, fetchPv, createArticle, updateArticle, queryTagList } from '@/api/article'
+import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -100,6 +138,12 @@ const calendarTypeOptions = [
   { key: 'JP', display_name: 'Japan' },
   { key: 'EU', display_name: 'Eurozone' }
 ]
+
+// const memberAuthority = [
+//   { key: 'Normal', display_name: 'Normal' },
+//   { key: 'Administrator', display_name: 'Administrator' },
+//   { key: 'Deleted', display_name: 'Deleted' }
+// ]
 
 // arr to obj, such as { CN : "China", US : "USA" }
 const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
@@ -138,9 +182,9 @@ export default {
         type: undefined,
         sort: '+id'
       },
-      importanceOptions: [1, 2, 3],
-      calendarTypeOptions,
-      sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
+      searchItem: [this.$t('member.name'), this.$t('member.email')],
+      memberAuthority: [this.$t('member.administrator'), this.$t('member.normal'), this.$t('member.deleted')],
+      sortOptions: [{ label: this.$t('common.idAscending'), key: '+id' }, { label: this.$t('common.idDescending'), key: '-id' }],
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
       temp: {
@@ -155,8 +199,8 @@ export default {
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: 'Edit',
-        create: 'Create'
+        update: this.$t('member.edit'),
+        create: this.$t('member.add')
       },
       dialogPvVisible: false,
       pvData: [],
@@ -169,15 +213,14 @@ export default {
     }
   },
   created() {
-    // this.getList()
-    this.queryList()
+    this.getList()
   },
   methods: {
     getList() {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
-        // this.list = response.data.items
-        // this.total = response.data.total
+        this.list = response.data.items
+        this.total = response.data.total
 
         // Just to simulate the time of the request
         setTimeout(() => {
@@ -185,18 +228,9 @@ export default {
         }, 1.5 * 1000)
       })
     },
-    queryList() {
-      // this.listLoading = true
-      queryTagList().then(response => {
-        this.list = response.data
-        this.total = response.total
-        this.listLoading = false
-        // console.log(this.list)
-      })
-    },
     handleFilter() {
       this.listQuery.page = 1
-      this.list.reverse()
+      this.getList()
     },
     handleModifyStatus(row, status) {
       this.$message({
