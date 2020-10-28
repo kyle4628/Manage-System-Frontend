@@ -111,7 +111,7 @@ export default {
     searchTitle: '請輸入搜尋項目',
     searchItem: '搜尋項目',
     memberStatus: '會員身分',
-    id: '會員ID',
+    id: '序號',
     name: '姓名',
     email: 'E-mail',
     authority: '權限',

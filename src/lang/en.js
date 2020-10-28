@@ -120,7 +120,7 @@ export default {
     searchTitle: 'Search',
     searchItem: 'Item',
     memberStatus: 'Status',
-    id: 'MemberID',
+    id: 'ID',
     name: 'Name',
     email: 'E-mail',
     authority: 'Authority',

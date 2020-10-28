@@ -23,9 +23,9 @@ export function logout() {
   })
 }
 
-export function testLogout() {
+export function queryUser() {
   return request({
-    url: '/auth/logout',
+    url: '/query/get_user_list',
     method: 'post',
     baseURL: 'http://localhost:57680'
   })

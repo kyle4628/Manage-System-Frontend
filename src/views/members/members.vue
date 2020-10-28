@@ -39,34 +39,34 @@
       </el-table-column>
       <el-table-column :label="$t('member.name')" width="120px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.reviewer }}</span>
+          <span>{{ row.name }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('member.email')" min-width="120px">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>
-          <el-tag>{{ row.type | typeFilter }}</el-tag>
+          <span class="link-type" @click="handleUpdate(row)">{{ row.email }}</span>
+          <!-- <el-tag>{{ row.email | typeFilter }}</el-tag> -->
         </template>
       </el-table-column>
       <el-table-column v-if="showReviewer" :label="$t('member.password')" width="110px" align="center">
         <template slot-scope="{row}">
-          <span style="color:red;">{{ row.reviewer }}</span>
+          <span style="color:red;">{{ row.password }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('member.created')" align="center" width="100px">
         <template slot-scope="{row}">
-          <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ row.createdTime }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('member.updated')" align="center" width="100px">
         <template slot-scope="{row}">
-          <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ row.updatedTime }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('member.authority')" class-name="status-col" width="100">
         <template slot-scope="{row}">
-          <el-tag :type="row.status | statusFilter">
-            {{ row.status }}
+          <el-tag :type="row.authority | statusFilter">
+            {{ row.authority }}
           </el-tag>
         </template>
       </el-table-column>
@@ -128,6 +128,7 @@
 
 <script>
 import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
+import { queryUser } from '@/api/user'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -213,19 +214,26 @@ export default {
     }
   },
   created() {
-    this.getList()
+    this.getUserList()
   },
   methods: {
     getList() {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.total = response.data.total
+        // this.list = response.data.items
+        // this.total = response.data.total
 
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
         }, 1.5 * 1000)
+      })
+    },
+    getUserList() {
+      queryUser().then(response => {
+        this.list = response.data
+        this.total = response.total
+        this.listLoading = false
       })
     },
     handleFilter() {
