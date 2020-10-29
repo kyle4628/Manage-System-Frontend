@@ -84,18 +84,18 @@ export default {
           duration: 2000
         })
       })
-    }
-  },
-  handleTest() {
-    userTest().then(() => {
-      console.log('Test')
-      this.$notify({
-        title: 'Test',
-        message: 'Test',
-        type: 'success',
-        duration: 2000
+    },
+    handleTest() {
+      userTest().then(() => {
+        console.log('Test')
+        this.$notify({
+          title: 'Test',
+          message: 'Test',
+          type: 'success',
+          duration: 2000
+        })
       })
-    })
+    }
   }
 }
 </script>
