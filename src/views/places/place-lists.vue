@@ -278,12 +278,8 @@ export default {
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
-      console.log(this.temp)
-      // this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
-      // const index = this.list.findIndex(v => v.id === this.temp.id)
-      // console.log(index)
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })

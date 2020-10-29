@@ -6,7 +6,7 @@
         <el-option v-for="item in searchItem" :key="item" :label="item" :value="item" />
       </el-select>
       <el-select v-model="listQuery.type" :placeholder="$t('member.memberStatus')" clearable class="filter-item" style="width: 130px;margin-left:10px;">
-        <el-option v-for="item in memberAuthority" :key="item" :label="item" :value="item" />
+        <el-option v-for="item in memberAuthority" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
       <el-select v-model="listQuery.sort" style="width: 140px;margin-left:10px;" class="filter-item" @change="handleFilter">
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
@@ -87,21 +87,21 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="30%">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="80px" style="width: 300px; margin-left:50px;">
         <el-form-item :label="$t('member.name')" prop="title">
-          <el-input v-model="temp.title" />
+          <el-input v-model="temp.name" />
         </el-form-item>
         <el-form-item :label="$t('member.password')" prop="title">
-          <el-input v-model="temp.title" />
+          <el-input v-model="temp.password" />
         </el-form-item>
         <el-form-item :label="$t('member.authority')" prop="type">
-          <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in memberAuthority" :key="item" :label="item" :value="item" />
+          <el-select v-model="temp.authority" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in memberAuthority" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-form-item :label="$t('member.created')" prop="timestamp">
-          <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date" />
+        <el-form-item :label="$t('member.created')">
+          <el-input v-model="temp.createdTime" disabled />
         </el-form-item>
-        <el-form-item :label="$t('member.updated')" prop="timestamp">
-          <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date" />
+        <el-form-item :label="$t('member.updated')">
+          <el-input v-model="temp.updatedTime" disabled />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -139,12 +139,6 @@ const calendarTypeOptions = [
   { key: 'JP', display_name: 'Japan' },
   { key: 'EU', display_name: 'Eurozone' }
 ]
-
-// const memberAuthority = [
-//   { key: 'Normal', display_name: 'Normal' },
-//   { key: 'Administrator', display_name: 'Administrator' },
-//   { key: 'Deleted', display_name: 'Deleted' }
-// ]
 
 // arr to obj, such as { CN : "China", US : "USA" }
 const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
@@ -184,18 +178,31 @@ export default {
         sort: '+id'
       },
       searchItem: [this.$t('member.name'), this.$t('member.email')],
-      memberAuthority: [this.$t('member.administrator'), this.$t('member.normal'), this.$t('member.deleted')],
+      memberAuthority: [
+        {
+          value: 0,
+          label: this.$t('member.administrator')
+        },
+        {
+          value: 1,
+          label: this.$t('member.normal')
+        },
+        {
+          value: 2,
+          label: this.$t('member.deleted')
+        }
+      ],
       sortOptions: [{ label: this.$t('common.idAscending'), key: '+id' }, { label: this.$t('common.idDescending'), key: '-id' }],
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
       temp: {
         id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        type: '',
-        status: 'published'
+        name: '',
+        email: '',
+        password: '',
+        authority: '',
+        createdTime: '',
+        updatedTime: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -213,10 +220,31 @@ export default {
       downloadLoading: false
     }
   },
+  watch: {
+    lang() {
+      this.setOptions()
+    }
+  },
   created() {
     this.getUserList()
   },
   methods: {
+    setOptions() {
+      this.memberAuthority = [
+        {
+          value: 'administrator',
+          label: this.$t('member.administrator')
+        },
+        {
+          value: 'normal',
+          label: this.$t('member.normal')
+        },
+        {
+          value: 'deleted',
+          label: this.$t('member.deleted')
+        }
+      ]
+    },
     getList() {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
@@ -234,6 +262,9 @@ export default {
         this.list = response.data
         this.total = response.total
         this.listLoading = false
+        setTimeout(() => {
+          this.listLoading = false
+        }, 2 * 1000)
       })
     },
     handleFilter() {
@@ -300,7 +331,6 @@ export default {
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
-      this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -311,7 +341,6 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
-          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
           updateArticle(tempData).then(() => {
             const index = this.list.findIndex(v => v.id === this.temp.id)
             this.list.splice(index, 1, this.temp)

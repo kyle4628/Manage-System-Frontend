@@ -30,3 +30,20 @@ export function queryUser() {
     baseURL: 'http://localhost:57680'
   })
 }
+
+export function userLogin(data) {
+  return request({
+    url: '/auth/login',
+    method: 'post',
+    data,
+    baseURL: 'http://localhost:57680'
+  })
+}
+
+export function userLogout() {
+  return request({
+    url: '/auth/logout',
+    method: 'post',
+    baseURL: 'http://localhost:57680'
+  })
+}
