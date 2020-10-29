@@ -47,3 +47,11 @@ export function userLogout() {
     baseURL: 'http://localhost:57680'
   })
 }
+
+export function userTest() {
+  return request({
+    url: '/auth/test',
+    method: 'post',
+    baseURL: 'http://localhost:57680'
+  })
+}

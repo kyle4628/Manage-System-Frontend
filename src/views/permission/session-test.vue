@@ -17,6 +17,7 @@
       </el-button>
     </div>
     <el-button @click="handleLogout">Log Out</el-button>
+    <el-button @click="handleTest">Test</el-button>
   </div>
 </template>
 
@@ -25,7 +26,7 @@
 // import { deepClone } from '@/utils'
 // import { getRoutes, getRoles, addRole, deleteRole, updateRole } from '@/api/role'
 // import i18n from '@/lang'
-import { userLogin, userLogout } from '@/api/user'
+import { userLogin, userLogout, userTest } from '@/api/user'
 
 const defaultRole = {
   key: '',
@@ -84,6 +85,17 @@ export default {
         })
       })
     }
+  },
+  handleTest() {
+    userTest().then(() => {
+      console.log('Test')
+      this.$notify({
+        title: 'Test',
+        message: 'Test',
+        type: 'success',
+        duration: 2000
+      })
+    })
   }
 }
 </script>
