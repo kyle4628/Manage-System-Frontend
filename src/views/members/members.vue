@@ -42,10 +42,9 @@
           <span>{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('member.email')" min-width="120px">
+      <el-table-column :label="$t('member.email')" min-width="200px">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.email }}</span>
-          <!-- <el-tag>{{ row.email | typeFilter }}</el-tag> -->
         </template>
       </el-table-column>
       <el-table-column v-if="showReviewer" :label="$t('member.password')" width="110px" align="center">
@@ -53,12 +52,12 @@
           <span style="color:red;">{{ row.password }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('member.created')" align="center" width="100px">
+      <el-table-column :label="$t('member.created')" align="center" width="250px">
         <template slot-scope="{row}">
           <span>{{ row.createdTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('member.updated')" align="center" width="100px">
+      <el-table-column :label="$t('member.updated')" align="center" width="250px">
         <template slot-scope="{row}">
           <span>{{ row.updatedTime }}</span>
         </template>
@@ -85,7 +84,7 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="30%">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="80px" style="width: 300px; margin-left:50px;">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="80px" style="width: 280px; margin-left:20px;">
         <el-form-item :label="$t('member.name')" prop="title">
           <el-input v-model="temp.name" />
         </el-form-item>
@@ -153,9 +152,9 @@ export default {
   filters: {
     statusFilter(status) {
       const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
+        0: 'success',
+        1: 'primary',
+        2: 'danger'
       }
       return statusMap[status]
     },

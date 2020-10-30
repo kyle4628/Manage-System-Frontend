@@ -16,6 +16,7 @@
         {{ $t('permission.confirm') }}
       </el-button>
     </div>
+    <el-button @click="handleLogin">Log In</el-button>
     <el-button @click="handleLogout">Log Out</el-button>
     <el-button @click="handleTest">Test</el-button>
   </div>
@@ -26,7 +27,23 @@
 // import { deepClone } from '@/utils'
 // import { getRoutes, getRoles, addRole, deleteRole, updateRole } from '@/api/role'
 // import i18n from '@/lang'
-import { userLogin, userLogout, userTest } from '@/api/user'
+import { userLogout, userLogin } from '@/api/user'
+import axios from 'axios'
+
+const service = axios.create({
+  baseURL: 'http://localhost:57680'
+})
+service.interceptors.request.use(
+  config => {
+    return config
+  }
+)
+service.interceptors.response.use(
+  response => {
+    const res = response.headers
+    return res
+  }
+)
 
 const defaultRole = {
   key: '',
@@ -63,9 +80,18 @@ export default {
   },
   methods: {
     confirmRole() {
-      console.log(this.temp)
       const tempData = Object.assign({}, this.temp)
-      userLogin(tempData).then(() => {
+      console.log(tempData)
+      // axios({
+      //   method: 'post',
+      //   baseURL: 'http://localhost:57680',
+      //   url: '/auth/login',
+      //   'Content-Type': 'application/json',
+      //   tempData
+      // })
+      //   .then((result) => { console.log(result.headers) })
+      userLogin(tempData).then((result) => {
+        console.log(result.headers)
         this.$notify({
           title: '成功',
           message: '登入成功',
@@ -73,6 +99,18 @@ export default {
           duration: 2000
         })
       })
+    },
+    handleLogin() {
+      const tempData = Object.assign({}, this.temp)
+      console.log(this.temp)
+      axios({
+        method: 'post',
+        baseURL: 'http://localhost:57680',
+        url: '/auth/login',
+        tempData,
+        'Content-Type': 'application/json'
+      })
+        .then((response) => { console.log(response) })
     },
     handleLogout() {
       userLogout().then(() => {
@@ -86,15 +124,12 @@ export default {
       })
     },
     handleTest() {
-      userTest().then(() => {
-        console.log('Test')
-        this.$notify({
-          title: 'Test',
-          message: 'Test',
-          type: 'success',
-          duration: 2000
-        })
+      axios({
+        method: 'post',
+        url: '/auth/test',
+        'Content-Type': 'application/json'
       })
+        .then((result) => { console.log(result.headers) })
     }
   }
 }

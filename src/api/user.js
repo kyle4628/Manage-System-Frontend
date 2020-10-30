@@ -36,6 +36,10 @@ export function userLogin(data) {
     url: '/auth/login',
     method: 'post',
     data,
+    xhrFields: {
+      withCredentials: true
+    },
+    contentType: 'application/json',
     baseURL: 'http://localhost:57680'
   })
 }
@@ -44,6 +48,10 @@ export function userLogout() {
   return request({
     url: '/auth/logout',
     method: 'post',
+    xhrFields: {
+      withCredentials: true
+    },
+    contentType: 'application/json',
     baseURL: 'http://localhost:57680'
   })
 }
@@ -52,6 +60,10 @@ export function userTest() {
   return request({
     url: '/auth/test',
     method: 'post',
+    xhrFields: {
+      withCredentials: true
+    },
+    contentType: 'application/json',
     baseURL: 'http://localhost:57680'
   })
 }
