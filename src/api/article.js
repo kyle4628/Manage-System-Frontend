@@ -48,6 +48,14 @@ export function queryTagList() {
   })
 }
 
+export function queryPlaceInfoList() {
+  return request({
+    url: '/query/get_place_info',
+    method: 'post',
+    baseURL: 'http://localhost:57680'
+  })
+}
+
 export function testPlaceList() {
   return request({
     url: '/query/get_place_list',

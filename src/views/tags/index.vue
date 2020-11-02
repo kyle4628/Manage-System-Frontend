@@ -63,17 +63,17 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="queryList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="30%">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="80px" style="width: 400px; margin-left:20px;">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="80px" style="width: 250px; margin-left:20px;">
         <el-form-item :label="$t('tag.placeName')" prop="title">
-          <el-input v-model="temp.author" disabled />
+          <el-input v-model="temp.place_name" />
         </el-form-item>
         <el-form-item :label="$t('tag.tagName')" prop="type">
-          <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
+          <el-select v-model="temp.tag_name" class="filter-item" placeholder="Please select">
             <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('tag.userName')" prop="title">
-          <el-input v-model="temp.author" disabled />
+          <el-input v-model="temp.user_name" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" align="center">
@@ -145,12 +145,9 @@ export default {
       showReviewer: false,
       temp: {
         id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        type: '',
-        status: 'published'
+        place_name: '',
+        tag_name: '',
+        user_name: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -222,12 +219,9 @@ export default {
     resetTemp() {
       this.temp = {
         id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        status: 'published',
-        type: ''
+        place_name: '',
+        tag_name: '',
+        user_name: ''
       }
     },
     handleCreate() {
@@ -258,7 +252,7 @@ export default {
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
-      this.temp.timestamp = new Date(this.temp.timestamp)
+      // this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -266,23 +260,22 @@ export default {
       })
     },
     updateData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          const tempData = Object.assign({}, this.temp)
-          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateArticle(tempData).then(() => {
-            const index = this.list.findIndex(v => v.id === this.temp.id)
-            this.list.splice(index, 1, this.temp)
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '更新成功',
-              type: 'success',
-              duration: 2000
-            })
-          })
-        }
+      // this.$refs['dataForm'].validate((valid) => {
+      // if (valid) {
+      const tempData = Object.assign({}, this.temp)
+      updateArticle(tempData).then(() => {
+        const index = this.list.findIndex(v => v.id === this.temp.id)
+        this.list.splice(index, 1, this.temp)
+        this.dialogFormVisible = false
+        this.$notify({
+          title: '成功',
+          message: '更新成功',
+          type: 'success',
+          duration: 2000
+        })
       })
+      // }
+      // })
     },
     handleDelete(row, index) {
       this.$notify({

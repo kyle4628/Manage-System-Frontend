@@ -33,33 +33,32 @@
       </el-table-column>
       <el-table-column :label="$t('place.name')" width="150px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ row.name }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('place.type')" width="150px" align="center">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.author }}</span>
-          <el-tag>{{ row.type | typeFilter }}</el-tag>
+          <span>{{ row.type }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('place.phone')" width="110px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.author }}</span>
+          <span>{{ row.phone }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('place.address')" min-width="200px">
         <template slot-scope="{row}">
-          <span>{{ row.title }}</span>
+          <span>{{ row.address }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('place.longitude')" width="200px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.author }}</span>
+          <span>{{ row.longitude }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('place.latitude')" width="200px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.author }}</span>
+          <span>{{ row.latitude }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.actions')" align="center" width="210" class-name="small-padding fixed-width">
@@ -74,7 +73,7 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="queryInfo" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="40%">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="90px" style="width: 400px; margin-left:40px;">
@@ -122,7 +121,7 @@
 </template>
 
 <script>
-import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
+import { fetchList, fetchPv, createArticle, updateArticle, queryPlaceInfoList } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -204,20 +203,29 @@ export default {
     }
   },
   created() {
-    this.getList()
+    // this.getList()
+    this.queryInfo()
   },
   methods: {
     getList() {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
-        console.log(response.data.items)
-        this.list = response.data.items
-        this.total = response.data.total
+        // console.log(response.data.items)
+        // this.list = response.data.items
+        // this.total = response.data.total
 
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
         }, 1.5 * 1000)
+      })
+    },
+    queryInfo() {
+      this.listLoading = true
+      queryPlaceInfoList().then(response => {
+        this.list = response.data
+        this.total = response.total
+        this.listLoading = false
       })
     },
     handleFilter() {
@@ -327,7 +335,6 @@ export default {
     },
     getSortClass: function(key) {
       const sort = this.listQuery.sort
-      console.log(sort)
       return sort === `+${key}` ? 'ascending' : 'descending'
     }
   }
