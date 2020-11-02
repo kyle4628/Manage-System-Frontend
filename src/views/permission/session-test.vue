@@ -103,14 +103,23 @@ export default {
     handleLogin() {
       const tempData = Object.assign({}, this.temp)
       console.log(this.temp)
-      axios({
-        method: 'post',
-        baseURL: 'http://localhost:57680',
-        url: '/auth/login',
-        tempData,
-        'Content-Type': 'application/json'
-      })
-        .then((response) => { console.log(response) })
+      axios.post('http://localhost:57680/token/login',
+        tempData)
+        .then((response) => {
+          console.log('response', response)
+          if (response.data.Result === true) {
+            localStorage.setItem('token', response.data.token)
+            localStorage.setItem('user_id', response.data.user_id)
+            this.$notify({
+              title: '成功',
+              message: '登入成功',
+              type: 'success',
+              duration: 2000
+            })
+          } else {
+            alert('Wrong Account and Password')
+          }
+        })
     },
     handleLogout() {
       userLogout().then(() => {

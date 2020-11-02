@@ -27,7 +27,11 @@ export function queryUser() {
   return request({
     url: '/query/get_user_list',
     method: 'post',
-    baseURL: 'http://localhost:57680'
+    baseURL: 'http://localhost:57680',
+    headers: {
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      user_id: localStorage.getItem('user_id')
+    }
   })
 }
 
