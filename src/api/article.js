@@ -44,7 +44,8 @@ export function queryTagList() {
   return request({
     url: '/query/get_tag_list',
     method: 'post',
-    baseURL: 'http://localhost:57680'
+    baseURL: 'http://localhost:57680',
+    headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }
   })
 }
 
