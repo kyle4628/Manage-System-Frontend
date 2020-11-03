@@ -28,7 +28,11 @@ export function createArticle(data) {
   return request({
     url: '/vue-element-admin/article/create',
     method: 'post',
-    data
+    data,
+    headers: {
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      user_id: localStorage.getItem('user_id')
+    }
   })
 }
 
@@ -36,7 +40,11 @@ export function updateArticle(data) {
   return request({
     url: '/vue-element-admin/article/update',
     method: 'post',
-    data
+    data,
+    headers: {
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      user_id: localStorage.getItem('user_id')
+    }
   })
 }
 
@@ -53,7 +61,11 @@ export function queryPlaceInfoList() {
   return request({
     url: '/query/get_place_info',
     method: 'post',
-    baseURL: 'http://localhost:57680'
+    baseURL: 'http://localhost:57680',
+    headers: {
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      user_id: localStorage.getItem('user_id')
+    }
   })
 }
 
@@ -61,7 +73,11 @@ export function testPlaceList() {
   return request({
     url: '/query/get_place_list',
     method: 'post',
-    baseURL: 'http://localhost:57680'
+    baseURL: 'http://localhost:57680',
+    headers: {
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      user_id: localStorage.getItem('user_id')
+    }
   })
 }
 
@@ -70,6 +86,10 @@ export function updatePlaceList(data) {
     url: '/query/update_placelist',
     method: 'post',
     data,
-    baseURL: 'http://localhost:57680'
+    baseURL: 'http://localhost:57680',
+    headers: {
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      user_id: localStorage.getItem('user_id')
+    }
   })
 }

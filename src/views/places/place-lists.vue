@@ -83,20 +83,27 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="40%">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="150px" style="width: 400px; margin-left:20px;">
-        <el-form-item :label="$t('placeList.userId')" prop="timestamp">
+        <!-- <el-form-item :label="$t('placeList.userId')" prop="timestamp">
           <el-input v-model="temp.user_id" disabled />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item :label="$t('placeList.userName')" prop="timestamp">
           <el-input v-model="temp.user_name" />
         </el-form-item>
         <el-form-item :label="$t('placeList.name')">
           <el-input v-model="temp.listName" />
         </el-form-item>
+        <el-form-item :label="$t('placeList.privacy')" prop="type">
+          <el-select v-model="temp.privacy" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in privacyOption" :key="item.key" :label="item.label" :value="item.key" />
+          </el-select>
+        </el-form-item>
         <el-form-item :label="$t('placeList.description')">
           <el-input v-model="temp.description" />
         </el-form-item>
-        <el-form-item :label="$t('placeList.coverImageURL')">
-          <el-input v-model="temp.coverImageURL" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
+        <el-form-item v-if="dialogStatus==='create' " :label="$t('placeList.addPlace')" prop="type">
+          <el-select v-model="temp.privacy" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in privacyOption" :key="item.key" :label="item.label" :value="item.key" />
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -164,12 +171,18 @@ export default {
       },
       importanceOptions: [1, 2, 3],
       calendarTypeOptions,
+      privacyOption: [
+        { key: 0, label: this.$t('placeList.public') },
+        { key: 1, label: this.$t('placeList.private') },
+        { key: 2, label: this.$t('placeList.personal') }
+      ],
       sortOptions: [{ label: this.$t('common.idAscending'), key: '+id' }, { label: this.$t('common.idDescending'), key: '-id' }],
       showReviewer: false,
       temp: {
         id: undefined,
         user_id: '',
         user_name: '',
+        privacy: '',
         listName: '',
         description: '',
         coverImageURL: ''
@@ -183,9 +196,9 @@ export default {
       dialogPvVisible: false,
       pvData: [],
       rules: {
-        type: [{ required: true, message: 'type is required', trigger: 'change' }],
+        // type: [{ required: true, message: 'type is required', trigger: 'change' }],
         // timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        title: [{ required: true, message: 'title is required', trigger: 'blur' }]
+        // title: [{ required: true, message: 'title is required', trigger: 'blur' }]
       },
       downloadLoading: false
     }
@@ -245,9 +258,9 @@ export default {
       this.temp = {
         id: undefined,
         user_id: '',
+        privacy: '',
         listName: '',
-        description: '',
-        coverImageURL: ''
+        description: ''
       }
     },
     handleCreate() {

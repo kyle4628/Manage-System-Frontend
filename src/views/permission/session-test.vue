@@ -66,8 +66,8 @@ export default {
         label: 'title'
       },
       temp: {
-        account: '',
-        password: ''
+        account: 'test',
+        password: 'test'
       }
     }
   },

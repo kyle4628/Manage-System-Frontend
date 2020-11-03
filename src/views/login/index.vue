@@ -59,6 +59,7 @@
 import { validUsername } from '@/utils/validate'
 import LangSelect from '@/components/LangSelect'
 import { testPlaceList } from '@/api/article'
+import axios from 'axios'
 
 export default {
   name: 'Login',
@@ -86,6 +87,10 @@ export default {
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+      },
+      temp: {
+        account: 'test',
+        password: 'test'
       },
       passwordType: 'password',
       capsTooltip: false,
@@ -138,6 +143,7 @@ export default {
     handleLogin() {
       this.$store.dispatch('user/login', this.loginForm)
         .then(() => {
+          this.loginWithToken()
           this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
           this.loading = false
         })
@@ -157,6 +163,27 @@ export default {
       //     return false
       //   }
       // })
+    },
+    loginWithToken() {
+      const tempData = Object.assign({}, this.temp)
+      console.log(this.temp)
+      axios.post('http://localhost:57680/token/login',
+        tempData)
+        .then((response) => {
+          console.log('response', response)
+          if (response.data.Result === true) {
+            localStorage.setItem('token', response.data.token)
+            localStorage.setItem('user_id', response.data.user_id)
+            this.$notify({
+              title: '成功',
+              message: '登入成功',
+              type: 'success',
+              duration: 2000
+            })
+          } else {
+            alert('Wrong Account and Password')
+          }
+        })
     },
     testList() {
       // this.listLoading = true
