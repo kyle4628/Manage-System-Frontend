@@ -185,6 +185,14 @@ export const asyncRoutes = [
         meta: {
           title: 'session-test'
         }
+      },
+      {
+        path: 'session-test-empty',
+        component: () => import('@/views/permission/session-test-empty'),
+        name: 'session-test-empty',
+        meta: {
+          title: 'session-test-empty'
+        }
       }
     ]
   },
