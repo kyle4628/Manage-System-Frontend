@@ -89,8 +89,8 @@ export default {
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
       temp: {
-        account: 'test',
-        password: 'test'
+        account: 'editor@khito.co',
+        password: 'behkhito'
       },
       passwordType: 'password',
       capsTooltip: false,
