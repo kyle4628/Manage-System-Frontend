@@ -81,6 +81,19 @@ export function testPlaceList() {
   })
 }
 
+export function updateMember(data) {
+  return request({
+    url: '/query/update_member',
+    method: 'post',
+    data,
+    baseURL: 'http://localhost:57680'
+    // headers: {
+    //   Authorization: 'Bearer ' + localStorage.getItem('token'),
+    //   user_id: localStorage.getItem('user_id')
+    // }
+  })
+}
+
 export function updatePlaceList(data) {
   return request({
     url: '/query/update_placelist',

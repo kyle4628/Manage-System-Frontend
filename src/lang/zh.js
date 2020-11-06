@@ -126,7 +126,10 @@ export default {
     delete: '刪除',
     administrator: '管理員',
     normal: '一般身分',
-    deleted: '已刪會員'
+    deleted: '已刪會員',
+    nameRule: '此項目必填',
+    passwordRule: '此項目必填',
+    authorityRule: '此項目必填'
   },
   tag: {
     searchTitle: '請輸入項目',

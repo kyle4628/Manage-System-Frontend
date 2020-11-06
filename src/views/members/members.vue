@@ -6,7 +6,7 @@
         <el-option v-for="item in searchItem" :key="item" :label="item" :value="item" />
       </el-select>
       <el-select v-model="listQuery.type" :placeholder="$t('member.memberStatus')" clearable class="filter-item" style="width: 130px;margin-left:10px;">
-        <el-option v-for="item in memberAuthority" :key="item.value" :label="item.label" :value="item.value" />
+        <el-option v-for="item in setOptions" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
       <el-select v-model="listQuery.sort" style="width: 140px;margin-left:10px;" class="filter-item" @change="handleFilter">
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
@@ -85,21 +85,21 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="30%">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="80px" style="width: 280px; margin-left:20px;">
-        <el-form-item :label="$t('member.name')" prop="title">
+        <el-form-item :label="$t('member.name')" prop="name">
           <el-input v-model="temp.name" />
         </el-form-item>
-        <el-form-item :label="$t('member.password')" prop="title">
+        <el-form-item :label="$t('member.password')" prop="password">
           <el-input v-model="temp.password" />
         </el-form-item>
-        <el-form-item :label="$t('member.authority')" prop="type">
+        <el-form-item :label="$t('member.authority')" prop="authority">
           <el-select v-model="temp.authority" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in memberAuthority" :key="item.value" :label="item.label" :value="item.value" />
+            <el-option v-for="item in setOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-form-item :label="$t('member.created')">
+        <el-form-item v-if="dialogStatus==='update'" :label="$t('member.created')">
           <el-input v-model="temp.createdTime" disabled />
         </el-form-item>
-        <el-form-item :label="$t('member.updated')">
+        <el-form-item v-if="dialogStatus==='update'" :label="$t('member.updated')">
           <el-input v-model="temp.updatedTime" disabled />
         </el-form-item>
       </el-form>
@@ -126,7 +126,7 @@
 </template>
 
 <script>
-import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
+import { fetchList, fetchPv, createArticle, updateMember } from '@/api/article'
 import { queryUser } from '@/api/user'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
@@ -210,26 +210,20 @@ export default {
         create: this.$t('member.add')
       },
       dialogPvVisible: false,
-      pvData: [],
-      rules: {
-        type: [{ required: true, message: 'type is required', trigger: 'change' }],
-        timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        title: [{ required: true, message: 'title is required', trigger: 'blur' }]
-      },
-      downloadLoading: false
+      pvData: []
     }
   },
-  watch: {
-    lang() {
-      this.setOptions()
-    }
-  },
-  created() {
-    this.getUserList()
-  },
-  methods: {
+  computed: {
+    rules() {
+      const memberRules = {
+        name: [{ required: true, message: this.$t('member.nameRule'), trigger: 'blur' }],
+        password: [{ required: true, message: this.$t('member.passwordRule'), trigger: 'blur' }],
+        authority: [{ required: true, message: this.$t('member.authorityRule'), trigger: 'change' }]
+      }
+      return memberRules
+    },
     setOptions() {
-      this.memberAuthority = [
+      const memberAuthority = [
         {
           value: 'administrator',
           label: this.$t('member.administrator')
@@ -243,7 +237,18 @@ export default {
           label: this.$t('member.deleted')
         }
       ]
-    },
+      return memberAuthority
+    }
+  },
+  // watch: {
+  //   lang() {
+  //     this.setOptions()
+  //   }
+  // },
+  created() {
+    this.getUserList()
+  },
+  methods: {
     getList() {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
@@ -294,12 +299,12 @@ export default {
     resetTemp() {
       this.temp = {
         id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        status: 'published',
-        type: ''
+        name: '',
+        email: '',
+        password: '',
+        authority: '',
+        createdTime: '',
+        updatedTime: ''
       }
     },
     handleCreate() {
@@ -329,7 +334,7 @@ export default {
       })
     },
     handleUpdate(row) {
-      this.temp = Object.assign({}, row) // copy obj
+      this.temp = Object.assign({}, row)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -340,9 +345,10 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
-          updateArticle(tempData).then(() => {
+          updateMember(tempData).then(() => {
             const index = this.list.findIndex(v => v.id === this.temp.id)
             this.list.splice(index, 1, this.temp)
+            this.getUserList()
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',

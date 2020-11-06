@@ -135,7 +135,10 @@ export default {
     delete: 'Delete',
     administrator: 'Administrator',
     normal: 'Normal',
-    deleted: 'Deleted'
+    deleted: 'Deleted',
+    nameRule: 'Name is required',
+    passwordRule: 'Password is required',
+    authorityRule: 'Authority is required'
   },
   tag: {
     searchTitle: 'Search',
