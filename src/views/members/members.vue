@@ -88,10 +88,13 @@
         <el-form-item :label="$t('member.name')" prop="name">
           <el-input v-model="temp.name" />
         </el-form-item>
+        <el-form-item v-if="dialogStatus==='create'" :label="$t('member.email')" prop="email">
+          <el-input v-model="temp.email" />
+        </el-form-item>
         <el-form-item :label="$t('member.password')" prop="password">
           <el-input v-model="temp.password" />
         </el-form-item>
-        <el-form-item :label="$t('member.authority')" prop="authority">
+        <el-form-item v-if="dialogStatus==='update'" :label="$t('member.authority')" prop="authority">
           <el-select v-model="temp.authority" class="filter-item" placeholder="Please select">
             <el-option v-for="item in setOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
@@ -126,7 +129,7 @@
 </template>
 
 <script>
-import { fetchList, fetchPv, createArticle, updateMember } from '@/api/article'
+import { fetchList, fetchPv, createMember, updateMember } from '@/api/article'
 import { queryUser } from '@/api/user'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
@@ -203,6 +206,11 @@ export default {
         createdTime: '',
         updatedTime: ''
       },
+      createModel: {
+        name: '',
+        email: '',
+        password: ''
+      },
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
@@ -217,6 +225,7 @@ export default {
     rules() {
       const memberRules = {
         name: [{ required: true, message: this.$t('member.nameRule'), trigger: 'blur' }],
+        email: [{ required: true, message: this.$t('member.passwordRule'), trigger: 'blur' }],
         password: [{ required: true, message: this.$t('member.passwordRule'), trigger: 'blur' }],
         authority: [{ required: true, message: this.$t('member.authorityRule'), trigger: 'change' }]
       }
@@ -318,14 +327,22 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          this.temp.author = 'vue-element-admin'
-          createArticle(this.temp).then(() => {
-            this.list.unshift(this.temp)
+          this.createModel.name = this.temp.name
+          this.createModel.email = this.temp.email
+          this.createModel.password = this.temp.password
+          this.temp.id = this.total + 1
+          var today = new Date()
+          var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()
+          var time = today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds()
+          this.temp.createdTime = date + ' ' + time
+          this.temp.authority = 1
+          createMember(this.createModel).then(() => {
+            this.list.push(this.temp)
+            this.getList()
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',
-              message: '创建成功',
+              message: '新增成功',
               type: 'success',
               duration: 2000
             })

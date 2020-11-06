@@ -87,7 +87,7 @@
           <el-input v-model="temp.user_id" disabled />
         </el-form-item> -->
         <el-form-item :label="$t('placeList.userName')" prop="timestamp">
-          <el-input v-model="temp.user_name" />
+          <el-input v-model="temp.user_name" disabled="dialogStatus ? 'create'" />
         </el-form-item>
         <el-form-item :label="$t('placeList.name')">
           <el-input v-model="temp.listName" />
