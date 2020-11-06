@@ -132,11 +132,12 @@ export default {
     actions: 'Actions',
     add: 'Create',
     edit: 'Edit',
-    delete: 'Delete',
+    blackList: 'Black List',
     administrator: 'Administrator',
     normal: 'Normal',
     deleted: 'Deleted',
     nameRule: 'Name is required',
+    emailRule: 'Email is required',
     passwordRule: 'Password is required',
     authorityRule: 'Authority is required'
   },

@@ -126,8 +126,9 @@ export default {
     delete: '刪除',
     administrator: '管理員',
     normal: '一般身分',
-    deleted: '已刪會員',
+    blackList: '黑名單',
     nameRule: '此項目必填',
+    emailRule: '此項目必填',
     passwordRule: '此項目必填',
     authorityRule: '此項目必填'
   },

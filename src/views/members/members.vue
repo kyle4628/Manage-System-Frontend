@@ -65,7 +65,7 @@
       <el-table-column :label="$t('member.authority')" class-name="status-col" width="100">
         <template slot-scope="{row}">
           <el-tag :type="row.authority | statusFilter">
-            {{ row.authority }}
+            <span>{{ authorityText[row.authority].name }}</span>
           </el-tag>
         </template>
       </el-table-column>
@@ -81,7 +81,7 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getUserList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="30%">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="80px" style="width: 280px; margin-left:20px;">
@@ -115,38 +115,14 @@
         </el-button>
       </div>
     </el-dialog>
-
-    <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
-      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
-        <el-table-column prop="key" label="Channel" />
-        <el-table-column prop="pv" label="Pv" />
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">{{ $t('table.confirm') }}</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-import { fetchList, fetchPv, createMember, updateMember } from '@/api/article'
+import { createMember, updateMember } from '@/api/article'
 import { queryUser } from '@/api/user'
 import waves from '@/directive/waves' // waves directive
-import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-
-const calendarTypeOptions = [
-  { key: 'CN', display_name: 'China' },
-  { key: 'US', display_name: 'USA' },
-  { key: 'JP', display_name: 'Japan' },
-  { key: 'EU', display_name: 'Eurozone' }
-]
-
-// arr to obj, such as { CN : "China", US : "USA" }
-const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
-  acc[cur.key] = cur.display_name
-  return acc
-}, {})
 
 export default {
   name: 'ComplexTable',
@@ -160,9 +136,6 @@ export default {
         2: 'danger'
       }
       return statusMap[status]
-    },
-    typeFilter(type) {
-      return calendarTypeKeyValue[type]
     }
   },
   data() {
@@ -180,22 +153,7 @@ export default {
         sort: '+id'
       },
       searchItem: [this.$t('member.name'), this.$t('member.email')],
-      memberAuthority: [
-        {
-          value: 0,
-          label: this.$t('member.administrator')
-        },
-        {
-          value: 1,
-          label: this.$t('member.normal')
-        },
-        {
-          value: 2,
-          label: this.$t('member.deleted')
-        }
-      ],
       sortOptions: [{ label: this.$t('common.idAscending'), key: '+id' }, { label: this.$t('common.idDescending'), key: '-id' }],
-      statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
       temp: {
         id: undefined,
@@ -217,8 +175,11 @@ export default {
         update: this.$t('member.edit'),
         create: this.$t('member.add')
       },
-      dialogPvVisible: false,
-      pvData: []
+      authorityText: {
+        0: { name: this.$t('member.administrator') },
+        1: { name: this.$t('member.normal') },
+        2: { name: this.$t('member.blackList') }
+      }
     }
   },
   computed: {
@@ -234,42 +195,25 @@ export default {
     setOptions() {
       const memberAuthority = [
         {
-          value: 'administrator',
+          value: 0,
           label: this.$t('member.administrator')
         },
         {
-          value: 'normal',
+          value: 1,
           label: this.$t('member.normal')
         },
         {
-          value: 'deleted',
-          label: this.$t('member.deleted')
+          value: 2,
+          label: this.$t('member.blackList')
         }
       ]
       return memberAuthority
     }
   },
-  // watch: {
-  //   lang() {
-  //     this.setOptions()
-  //   }
-  // },
   created() {
     this.getUserList()
   },
   methods: {
-    getList() {
-      this.listLoading = true
-      fetchList(this.listQuery).then(response => {
-        // this.list = response.data.items
-        // this.total = response.data.total
-
-        // Just to simulate the time of the request
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 1000)
-      })
-    },
     getUserList() {
       queryUser().then(response => {
         this.list = response.data
@@ -292,6 +236,7 @@ export default {
       row.status = status
     },
     sortChange(data) {
+      // console.log(data) //{column: {…}, prop: "id", order: "ascending"}
       const { prop, order } = data
       if (prop === 'id') {
         this.sortByID(order)
@@ -316,8 +261,16 @@ export default {
         updatedTime: ''
       }
     },
+    resetCreateModel() {
+      this.createModel = {
+        name: '',
+        email: '',
+        password: ''
+      }
+    },
     handleCreate() {
       this.resetTemp()
+      this.resetCreateModel()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -365,7 +318,6 @@ export default {
           updateMember(tempData).then(() => {
             const index = this.list.findIndex(v => v.id === this.temp.id)
             this.list.splice(index, 1, this.temp)
-            this.getUserList()
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',
@@ -373,6 +325,7 @@ export default {
               type: 'success',
               duration: 2000
             })
+            this.getUserList()
           })
         }
       })
@@ -385,35 +338,6 @@ export default {
         duration: 2000
       })
       this.list.splice(index, 1)
-    },
-    handleFetchPv(pv) {
-      fetchPv(pv).then(response => {
-        this.pvData = response.data.pvData
-        this.dialogPvVisible = true
-      })
-    },
-    handleDownload() {
-      this.downloadLoading = true
-      import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-        const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
-        const data = this.formatJson(filterVal)
-        excel.export_json_to_excel({
-          header: tHeader,
-          data,
-          filename: 'table-list'
-        })
-        this.downloadLoading = false
-      })
-    },
-    formatJson(filterVal) {
-      return this.list.map(v => filterVal.map(j => {
-        if (j === 'timestamp') {
-          return parseTime(v[j])
-        } else {
-          return v[j]
-        }
-      }))
     },
     getSortClass: function(key) {
       const sort = this.listQuery.sort
