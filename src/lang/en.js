@@ -132,6 +132,7 @@ export default {
     actions: 'Actions',
     add: 'Create',
     edit: 'Edit',
+    delete: 'Delete',
     blackList: 'Black List',
     administrator: 'Administrator',
     normal: 'Normal',

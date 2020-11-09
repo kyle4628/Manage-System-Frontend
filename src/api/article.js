@@ -69,6 +69,14 @@ export function queryPlaceInfoList() {
   })
 }
 
+export function queryPlaceSelectoin() {
+  return request({
+    url: '/query/get_place_selection',
+    method: 'post',
+    baseURL: 'http://localhost:57680'
+  })
+}
+
 export function testPlaceList() {
   return request({
     url: '/query/get_place_list',
@@ -91,6 +99,18 @@ export function createMember(data) {
     //   Authorization: 'Bearer ' + localStorage.getItem('token'),
     //   user_id: localStorage.getItem('user_id')
     // }
+  })
+}
+
+export function createList(data) {
+  return request({
+    url: '/user/create_list',
+    method: 'post',
+    data,
+    baseURL: 'http://localhost:57680',
+    headers: {
+      session_id: 1
+    }
   })
 }
 

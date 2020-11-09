@@ -62,7 +62,7 @@
           <span>{{ row.updatedTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('member.authority')" class-name="status-col" width="100">
+      <el-table-column :label="$t('member.authority')" class-name="status-col" width="120">
         <template slot-scope="{row}">
           <el-tag :type="row.authority | statusFilter">
             <span>{{ authorityText[row.authority].name }}</span>
@@ -174,15 +174,18 @@ export default {
       textMap: {
         update: this.$t('member.edit'),
         create: this.$t('member.add')
-      },
-      authorityText: {
-        0: { name: this.$t('member.administrator') },
-        1: { name: this.$t('member.normal') },
-        2: { name: this.$t('member.blackList') }
       }
     }
   },
   computed: {
+    authorityText() {
+      const memberAuthority = {
+        0: { name: this.$t('member.administrator') },
+        1: { name: this.$t('member.normal') },
+        2: { name: this.$t('member.blackList') }
+      }
+      return memberAuthority
+    },
     rules() {
       const memberRules = {
         name: [{ required: true, message: this.$t('member.nameRule'), trigger: 'blur' }],
