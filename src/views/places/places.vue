@@ -3,16 +3,13 @@
     <div class="filter-container">
       <el-input v-model="listQuery.title" :placeholder="$t('place.searchTitle')" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-select v-model="listQuery.importance" :placeholder="$t('place.searchItem')" clearable style="width: 120px;margin-left:10px;" class="filter-item">
-        <el-option v-for="item in searchItem" :key="item" :label="item" :value="item" />
+        <!-- <el-option v-for="item in searchItem" :key="item" :label="item" :value="item" /> -->
       </el-select>
       <el-select v-model="listQuery.sort" style="width: 140px;margin-left:10px;" class="filter-item" @change="handleFilter">
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
       </el-select>
       <el-button v-waves class="filter-item" style="margin-left:10px;" type="primary" icon="el-icon-search" @click="handleFilter">
         {{ $t('place.search') }}
-      </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-        {{ $t('place.add') }}
       </el-button>
     </div>
 
@@ -62,12 +59,9 @@
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.actions')" align="center" width="210" class-name="small-padding fixed-width">
-        <template slot-scope="{row,$index}">
+        <template slot-scope="{row}">
           <el-button type="primary" @click="handleUpdate(row)">
-            {{ $t('table.edit') }}
-          </el-button>
-          <el-button v-if="row.status!='deleted'" type="danger" @click="handleDelete(row,$index)">
-            {{ $t('table.delete') }}
+            Detail
           </el-button>
         </template>
       </el-table-column>
@@ -75,71 +69,74 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="queryInfo" />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="40%">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="90px" style="width: 400px; margin-left:40px;">
-        <el-form-item :label="$t('place.name')" prop="name">
-          <el-input v-model="temp.title" />
-        </el-form-item>
-        <el-form-item :label="$t('place.type')" prop="type">
-          <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="$t('place.phone')" prop="phone">
-          <el-input v-model="temp.title" />
-        </el-form-item>
-        <el-form-item :label="$t('place.address')" prop="address">
-          <el-input v-model="temp.title" />
-        </el-form-item>
-        <el-form-item :label="$t('place.longitude')" prop="longitude">
-          <el-input v-model="temp.title" />
-        </el-form-item>
-        <el-form-item :label="$t('place.latitude')" prop="latitude">
-          <el-input v-model="temp.title" />
-        </el-form-item>
-      </el-form>
+    <el-dialog title="Detail" :visible.sync="dialogFormVisible" width="30%">
+      <el-tabs v-model="activeName" type="card">
+        <el-tab-pane label="標籤" name="first">
+          <el-table
+            :data="tagList"
+            border
+            fit
+            highlight-current-row
+            style="width: 100%;"
+          >
+            <el-table-column label="標籤名稱" align="center">
+              <template slot-scope="{row}">
+                <span>{{ row.tagName }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="標籤作者" align="center">
+              <template slot-scope="{row}">
+                <span>{{ row.tagCreatorName }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="建立時間" align="center">
+              <template slot-scope="{row}">
+                <span>{{ row.tagCreatedTime }}</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="地點清單" name="second">
+          <el-table
+            :data="placeList"
+            border
+            highlight-current-row
+            style="width: 100%;"
+          >
+            <el-table-column label="清單名稱" align="center">
+              <template slot-scope="{row}">
+                <span>{{ row.placeListName }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="清單作者" align="center">
+              <template slot-scope="{row}">
+                <span>{{ row.listCreatorName }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="建立時間" align="center">
+              <template slot-scope="{row}">
+                <span>{{ row.listCreatedTime }}</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+      </el-tabs>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
           {{ $t('table.cancel') }}
         </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          {{ $t('table.confirm') }}
-        </el-button>
       </div>
-    </el-dialog>
-
-    <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
-      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
-        <el-table-column prop="key" label="Channel" />
-        <el-table-column prop="pv" label="Pv" />
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">{{ $t('table.confirm') }}</el-button>
-      </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { fetchList, fetchPv, createArticle, updateArticle, queryPlaceInfoList } from '@/api/article'
+import { fetchList, updateArticle, queryPlaceInfoList } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
-const calendarTypeOptions = [
-  { key: 'CN', display_name: 'China' },
-  { key: 'US', display_name: 'USA' },
-  { key: 'JP', display_name: 'Japan' },
-  { key: 'EU', display_name: 'Eurozone' }
-]
-
-// arr to obj, such as { CN : "China", US : "USA" }
-const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
-  acc[cur.key] = cur.display_name
-  return acc
-}, {})
-
 export default {
-  name: 'ComplexTable',
+  name: 'Places',
   components: { Pagination },
   directives: { waves },
   filters: {
@@ -150,17 +147,17 @@ export default {
         deleted: 'danger'
       }
       return statusMap[status]
-    },
-    typeFilter(type) {
-      return calendarTypeKeyValue[type]
     }
   },
   data() {
     return {
       tableKey: 0,
       list: null,
+      tagList: null,
+      placeList: null,
       total: 0,
       listLoading: true,
+      activeName: 'first',
       listQuery: {
         page: 1,
         limit: 20,
@@ -169,10 +166,7 @@ export default {
         type: undefined,
         sort: '+id'
       },
-      importanceOptions: [1, 2, 3],
-      calendarTypeOptions,
       sortOptions: [{ label: this.$t('common.idAscending'), key: '+id' }, { label: this.$t('common.idDescending'), key: '-id' }],
-      statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
       temp: {
         id: undefined,
@@ -184,22 +178,7 @@ export default {
         status: 'published'
       },
       dialogFormVisible: false,
-      dialogStatus: '',
-      textMap: {
-        update: this.$t('place.edit'),
-        create: this.$t('place.add')
-      },
-      dialogPvVisible: false,
-      pvData: [],
-      rules: {
-        type: [{ type: 'string', required: true, message: 'Type is required', trigger: 'blur' }],
-        name: [{ type: 'string', required: true, message: 'List name is required', trigger: 'blur' }],
-        // phone: [{ required: true, message: 'Phone is required', trigger: 'blur' }],
-        address: [{ type: 'string', required: true, message: 'Address is required', trigger: 'blur' }],
-        longitude: [{ type: 'string', required: true, message: 'Longitude is required', trigger: 'blur' }],
-        latitude: [{ type: 'string', required: true, message: 'Latitude is required', trigger: 'blur' }]
-      },
-      downloadLoading: false
+      dialogStatus: ''
     }
   },
   created() {
@@ -253,51 +232,39 @@ export default {
       }
       this.handleFilter()
     },
-    resetTemp() {
-      this.temp = {
-        id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        status: 'published',
-        type: ''
-      }
-    },
-    handleCreate() {
-      this.resetTemp()
-      this.dialogStatus = 'create'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-    },
-    createData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          this.temp.author = 'vue-element-admin'
-          createArticle(this.temp).then(() => {
-            this.list.unshift(this.temp)
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '创建成功',
-              type: 'success',
-              duration: 2000
-            })
-          })
-        }
-      })
-    },
+    // handleCreate() {
+    //   this.resetTemp()
+    //   this.dialogStatus = 'create'
+    //   this.dialogFormVisible = true
+    //   this.$nextTick(() => {
+    //     this.$refs['dataForm'].clearValidate()
+    //   })
+    // },
+    // createData() {
+    //   this.$refs['dataForm'].validate((valid) => {
+    //     if (valid) {
+    //       this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
+    //       this.temp.author = 'vue-element-admin'
+    //       createArticle(this.temp).then(() => {
+    //         this.list.unshift(this.temp)
+    //         this.dialogFormVisible = false
+    //         this.$notify({
+    //           title: '成功',
+    //           message: '创建成功',
+    //           type: 'success',
+    //           duration: 2000
+    //         })
+    //       })
+    //     }
+    //   })
+    // },
     handleUpdate(row) {
-      this.temp = Object.assign({}, row) // copy obj
-      this.temp.timestamp = new Date(this.temp.timestamp)
-      this.dialogStatus = 'update'
+      this.tagList = Object.assign({}, row.tagInfo)
+      this.placeList = Object.assign({}, row.listInfo)
+      console.log(typeof (this.tagList))
+      console.log(this.placeList)
+      // this.dialogStatus = 'update'
       this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
     },
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
@@ -326,12 +293,6 @@ export default {
         duration: 2000
       })
       this.list.splice(index, 1)
-    },
-    handleFetchPv(pv) {
-      fetchPv(pv).then(response => {
-        this.pvData = response.data.pvData
-        this.dialogPvVisible = true
-      })
     },
     getSortClass: function(key) {
       const sort = this.listQuery.sort
