@@ -6,6 +6,7 @@
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
+import { get_user_growth } from '@/api/user'
 
 export default {
   mixins: [resize],
@@ -33,7 +34,10 @@ export default {
   },
   data() {
     return {
-      chart: null
+      chart: null,
+      listUserGrowth: [],
+      listUserGrowthKey: [],
+      listUserGrowthCount: []
     }
   },
   watch: {
@@ -62,72 +66,85 @@ export default {
       this.setOptions(this.chartData)
     },
     setOptions({ expectedData, actualData } = {}) {
-      this.chart.setOption({
-        xAxis: {
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          boundaryGap: false,
-          axisTick: {
-            show: false
-          }
-        },
-        grid: {
-          left: 10,
-          right: 10,
-          bottom: 20,
-          top: 30,
-          containLabel: true
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'cross'
+      get_user_growth().then(response => {
+        this.listUserGrowth = response.data
+        this.listUserGrowthCount = []
+        this.listUserGrowthKey = []
+        this.listUserGrowthCount = this.listUserGrowth.map(item => Object.values(item)[0])
+        this.listUserGrowthKey = this.listUserGrowth.map(item => Object.values(item)[1])
+        const datas = { key: this.listUserGrowthKey, count: this.listUserGrowthCount }
+        return datas
+      }).then(result => {
+        this.chart.setOption({
+          xAxis: {
+          // data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            // data:Object.values(this.listUserGrowthKey),
+            // data:["2020-10-27", "2020-11-06", "2020-11-09", "noDateInfo"],
+            data: result.key,
+            boundaryGap: false,
+            axisTick: {
+              show: false
+            }
           },
-          padding: [5, 10]
-        },
-        yAxis: {
-          axisTick: {
-            show: false
-          }
-        },
-        legend: {
-          data: ['expected', 'actual']
-        },
-        series: [{
-          name: 'expected', itemStyle: {
-            normal: {
-              color: '#FF005A',
-              lineStyle: {
+          grid: {
+            left: 10,
+            right: 10,
+            bottom: 20,
+            top: 30,
+            containLabel: true
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'cross'
+            },
+            padding: [5, 10]
+          },
+          yAxis: {
+            axisTick: {
+              show: false
+            }
+          },
+          legend: {
+            data: ['expected', 'actual']
+          },
+          series: [{
+            name: 'expected', itemStyle: {
+              normal: {
                 color: '#FF005A',
-                width: 2
+                lineStyle: {
+                  color: '#FF005A',
+                  width: 2
+                }
               }
-            }
+            },
+            smooth: true,
+            type: 'line',
+            data: result.count,
+            animationDuration: 2800,
+            animationEasing: 'cubicInOut'
           },
-          smooth: true,
-          type: 'line',
-          data: expectedData,
-          animationDuration: 2800,
-          animationEasing: 'cubicInOut'
-        },
-        {
-          name: 'actual',
-          smooth: true,
-          type: 'line',
-          itemStyle: {
-            normal: {
-              color: '#3888fa',
-              lineStyle: {
+          {
+            name: 'actual',
+            smooth: true,
+            type: 'line',
+            itemStyle: {
+              normal: {
                 color: '#3888fa',
-                width: 2
-              },
-              areaStyle: {
-                color: '#f3f8ff'
+                lineStyle: {
+                  color: '#3888fa',
+                  width: 2
+                },
+                areaStyle: {
+                  color: '#f3f8ff'
+                }
               }
-            }
-          },
-          data: actualData,
-          animationDuration: 2800,
-          animationEasing: 'quadraticOut'
-        }]
+            },
+            data: result.count,
+            animationDuration: 2800,
+            animationEasing: 'quadraticOut'
+          }]
+        })
       })
     }
   }

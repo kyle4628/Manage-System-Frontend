@@ -5,44 +5,44 @@
     <el-button :loading="downloadLoading" style="margin-bottom:20px" type="primary" icon="el-icon-document" @click="handleDownload">
       {{ $t('excel.selectedExport') }}
     </el-button>
-    <a href="https://panjiachen.github.io/vue-element-admin-site/feature/component/excel.html" target="_blank" style="margin-left:15px;">
+    <!-- <a href="https://panjiachen.github.io/vue-element-admin-site/feature/component/excel.html" target="_blank" style="margin-left:15px;">
       <el-tag type="info">Documentation</el-tag>
-    </a>
+    </a> -->
     <el-table
       ref="multipleTable"
       v-loading="listLoading"
       :data="list"
-      element-loading-text="拼命加载中"
+      element-loading-text="傳輸中"
       border
       fit
       highlight-current-row
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" align="center" />
-      <el-table-column align="center" label="Id" width="95">
+      <el-table-column align="center" label="編號" width="95">
         <template slot-scope="scope">
-          {{ scope.$index }}
+          {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column label="Title">
+      <el-table-column label="名稱">
         <template slot-scope="scope">
-          {{ scope.row.title }}
+          {{ scope.row.listName }}
         </template>
       </el-table-column>
-      <el-table-column label="Author" width="110" align="center">
+      <el-table-column label="權限" width="160" align="center">
         <template slot-scope="scope">
-          <el-tag>{{ scope.row.author }}</el-tag>
+          <el-tag>{{ scope.row.privacy }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Readings" width="115" align="center">
+      <el-table-column label="敘述" width="400" align="center">
         <template slot-scope="scope">
-          {{ scope.row.pageviews }}
+          {{ scope.row.description }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="PDate" width="220">
+      <el-table-column align="建立時間" label="PDate" width="220">
         <template slot-scope="scope">
           <i class="el-icon-time" />
-          <span>{{ scope.row.display_time }}</span>
+          <span>{{ scope.row.createdTime }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -50,18 +50,21 @@
 </template>
 
 <script>
-import { fetchList } from '@/api/article'
-
+// import { fetchList } from '@/api/article'
+// import { createList, testPlaceList, queryPlaceSelectoin, updatePlaceList } from '@/api/article'
 export default {
   name: 'SelectExcel',
   data() {
     return {
       list: null,
+      total: null,
       listLoading: true,
       multipleSelection: [],
       downloadLoading: false,
       filename: ''
     }
+  },
+  computed: {
   },
   created() {
     this.fetchData()
@@ -69,10 +72,23 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.listLoading = false
-      })
+      // testPlaceList().then(response => {
+      //   this.list = response.data
+      //   this.total = response.total
+      //   this.listLoading = false
+      // })
+      // fetchList(this.listQuery).then(response => {
+      //   this.list = response.data.items
+      //   this.listLoading = false
+      // })
+    },
+    mapPrivacy(privacy) {
+      const placeListPrivacy = {
+        1: '公開',
+        2: '非公開',
+        3: '熱門'
+      }
+      return placeListPrivacy[privacy]
     },
     handleSelectionChange(val) {
       this.multipleSelection = val
@@ -81,8 +97,8 @@ export default {
       if (this.multipleSelection.length) {
         this.downloadLoading = true
         import('@/vendor/Export2Excel').then(excel => {
-          const tHeader = ['Id', 'Title', 'Author', 'Readings', 'Date']
-          const filterVal = ['id', 'title', 'author', 'pageviews', 'display_time']
+          const tHeader = ['清單編號', '名稱', '權限', '敘述', '建立時間']
+          const filterVal = ['id', 'listName', 'privacy', 'description', 'createdTime']
           const list = this.multipleSelection
           const data = this.formatJson(filterVal, list)
           excel.export_json_to_excel({

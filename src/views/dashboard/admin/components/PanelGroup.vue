@@ -7,48 +7,48 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            New Visits
+            會員總數
           </div>
-          <count-to :start-val="0" :end-val="222" :duration="1500" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="userCount" :duration="1500" class="card-panel-num" />
         </div>
       </div>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel" @click="handleSetLineChartData('messages')">
         <div class="card-panel-icon-wrapper icon-message">
-          <svg-icon icon-class="message" class-name="card-panel-icon" />
+          <svg-icon icon-class="clipboard" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Messages
+            清單數量
           </div>
-          <count-to :start-val="0" :end-val="3212" :duration="1500" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="listCount" :duration="1500" class="card-panel-num" />
         </div>
       </div>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel" @click="handleSetLineChartData('places')">
         <div class="card-panel-icon-wrapper icon-money">
-          <svg-icon icon-class="money" class-name="card-panel-icon" />
+          <svg-icon icon-class="star" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Places
+            地點總數
           </div>
-          <count-to :start-val="0" :end-val="520" :duration="1500" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="placeCount" :duration="1500" class="card-panel-num" />
         </div>
       </div>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel" @click="handleSetLineChartData('lists')">
         <div class="card-panel-icon-wrapper icon-shopping">
-          <svg-icon icon-class="shopping" class-name="card-panel-icon" />
+          <svg-icon icon-class="nested" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Lists
+            標籤數量
           </div>
-          <count-to :start-val="0" :end-val="204" :duration="1500" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="tagCount" :duration="1500" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -57,12 +57,33 @@
 
 <script>
 import CountTo from 'vue-count-to'
-
+import { get_all_data } from '@/api/user'
 export default {
   components: {
     CountTo
   },
+  data() {
+    return {
+      userCount: 0,
+      listCount: 0,
+      placeCount: 0,
+      tagCount: 0
+    }
+  },
+  mounted() {
+    this.initChart()
+  },
   methods: {
+    initChart() {
+      get_all_data().then(response => {
+        const res = response.data
+        console.log(response.data)
+        this.userCount = res[0] + 222
+        this.listCount = res[1] + 68
+        this.placeCount = res[2] + 343
+        this.tagCount = res[3] + 97
+      })
+    },
     handleSetLineChartData(type) {
       this.$emit('handleSetLineChartData', type)
     }

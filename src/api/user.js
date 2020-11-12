@@ -71,3 +71,59 @@ export function userTest() {
     baseURL: 'http://localhost:57680'
   })
 }
+
+export function get_user_growth() {
+  return request({
+    url: '/query/get_user_growth',
+    method: 'post',
+    xhrFields: {
+      withCredentials: true
+    },
+    contentType: 'application/json',
+    baseURL: 'http://localhost:57680'
+  })
+}
+export function get_all_data() {
+  return request({
+    url: '/query/get_all_data_count',
+    method: 'post',
+    xhrFields: {
+      withCredentials: true
+    },
+    contentType: 'application/json',
+    baseURL: 'http://localhost:57680'
+  })
+}
+export function get_tag_count() {
+  return request({
+    url: '/query/get_tag_count',
+    method: 'post',
+    xhrFields: {
+      withCredentials: true
+    },
+    contentType: 'application/json',
+    baseURL: 'http://localhost:57680'
+  })
+}
+export function get_tag_event_count() {
+  return request({
+    url: '/query/get_tag_event_count',
+    method: 'post',
+    xhrFields: {
+      withCredentials: true
+    },
+    contentType: 'application/json',
+    baseURL: 'http://localhost:57680'
+  })
+}
+export function get_place_tag_count() {
+  return request({
+    url: '/query/get_place_tag_count',
+    method: 'post',
+    xhrFields: {
+      withCredentials: true
+    },
+    contentType: 'application/json',
+    baseURL: 'http://localhost:57680'
+  })
+}

@@ -201,37 +201,37 @@ export const asyncRoutes = [
   // nestedRouter,
   // tableRouter,
 
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/list',
-    name: 'Example',
-    meta: {
-      title: 'example',
-      icon: 'el-icon-s-help'
-    },
-    children: [
-      {
-        path: 'create',
-        component: () => import('@/views/example/create'),
-        name: 'CreateArticle',
-        meta: { title: 'createArticle', icon: 'edit' }
-      },
-      {
-        path: 'edit/:id(\\d+)',
-        component: () => import('@/views/example/edit'),
-        name: 'EditArticle',
-        meta: { title: 'editArticle', noCache: true, activeMenu: '/example/list' },
-        hidden: true
-      },
-      {
-        path: 'list',
-        component: () => import('@/views/example/list'),
-        name: 'ArticleList',
-        meta: { title: 'articleList', icon: 'list' }
-      }
-    ]
-  },
+  // {
+  //   path: '/example',
+  //   component: Layout,
+  //   redirect: '/example/list',
+  //   name: 'Example',
+  //   meta: {
+  //     title: 'example',
+  //     icon: 'el-icon-s-help'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'create',
+  //       component: () => import('@/views/example/create'),
+  //       name: 'CreateArticle',
+  //       meta: { title: 'createArticle', icon: 'edit' }
+  //     },
+  //     {
+  //       path: 'edit/:id(\\d+)',
+  //       component: () => import('@/views/example/edit'),
+  //       name: 'EditArticle',
+  //       meta: { title: 'editArticle', noCache: true, activeMenu: '/example/list' },
+  //       hidden: true
+  //     },
+  //     {
+  //       path: 'list',
+  //       component: () => import('@/views/example/list'),
+  //       name: 'ArticleList',
+  //       meta: { title: 'articleList', icon: 'list' }
+  //     }
+  //   ]
+  // },
 
   {
     path: '/excel',
@@ -243,50 +243,43 @@ export const asyncRoutes = [
       icon: 'excel'
     },
     children: [
+      // {
+      //   path: 'export-excel-tag',
+      //   component: () => import('@/views/excel/export-excel-tag'),
+      //   name: 'ExportExcel',
+      //   meta: { title: 'selectExcelTag' }
+      // },
       {
-        path: 'export-excel',
-        component: () => import('@/views/excel/export-excel'),
-        name: 'ExportExcel',
-        meta: { title: 'exportExcel' }
-      },
-      {
-        path: 'export-selected-excel',
-        component: () => import('@/views/excel/select-excel'),
+        path: 'export-selected-excel-place',
+        component: () => import('@/views/excel/select-excel-place'),
         name: 'SelectExcel',
-        meta: { title: 'selectExcel' }
+        meta: { title: 'selectExcelPlace' }
       },
       {
-        path: 'export-merge-header',
-        component: () => import('@/views/excel/merge-header'),
-        name: 'MergeHeader',
-        meta: { title: 'mergeHeader' }
+        path: 'export-selected-excel-list',
+        component: () => import('@/views/excel/select-excel-list'),
+        name: 'SelectExcel',
+        meta: { title: 'selectExcelList' }
       },
       {
-        path: 'upload-excel',
-        component: () => import('@/views/excel/upload-excel'),
-        name: 'UploadExcel',
-        meta: { title: 'uploadExcel' }
+        path: 'export-selected-excel-tag',
+        component: () => import('@/views/excel/select-excel-tag'),
+        name: 'SelectExcel',
+        meta: { title: 'selectExcelTag' }
       }
+      // {
+      //   path: 'export-merge-header',
+      //   component: () => import('@/views/excel/merge-header'),
+      //   name: 'MergeHeader',
+      //   meta: { title: 'mergeHeader' }
+      // },
+      // {
+      //   path: 'upload-excel',
+      //   component: () => import('@/views/excel/upload-excel'),
+      //   name: 'UploadExcel',
+      //   meta: { title: 'uploadExcel' }
+      // }
     ]
-  },
-
-  {
-    path: '/pdf',
-    component: Layout,
-    redirect: '/pdf/index',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/pdf/index'),
-        name: 'PDF',
-        meta: { title: 'pdf', icon: 'pdf' }
-      }
-    ]
-  },
-  {
-    path: '/pdf/download',
-    component: () => import('@/views/pdf/download'),
-    hidden: true
   },
 
   // 404 page must be placed at the end !!!

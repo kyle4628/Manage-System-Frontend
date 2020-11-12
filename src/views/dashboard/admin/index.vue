@@ -7,10 +7,16 @@
     </el-row>
 
     <el-row :gutter="32">
-      <el-col :xs="24" :sm="24" :lg="8">
+      <!-- <el-col :xs="24" :sm="24" :lg="8">
         <div class="chart-wrapper">
           <raddar-chart />
-        </div>
+        </div> -->
+      <!-- </el-col> -->
+      <!-- <el-col :xs="24" :sm="24" :lg="8" style="margin-bottom:30px;">
+        <todo-list />
+      </el-col> -->
+      <el-col :xs="24" :sm="24" :lg="8" style="padding-right:8px;margin-bottom:30px;">
+        <transaction-table />
       </el-col>
       <el-col :xs="24" :sm="24" :lg="8">
         <div class="chart-wrapper">
@@ -23,8 +29,9 @@
         </div>
       </el-col>
     </el-row>
+    <!-- <img src="http://localhost:57680/images/410dbd1f-3ec6-44eb-8401-703efa20f06f.png"> -->
 
-    <el-row :gutter="8">
+    <!-- <el-row :gutter="8">
       <el-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 24}" :lg="{span: 12}" :xl="{span: 12}" style="padding-right:8px;margin-bottom:30px;">
         <transaction-table />
       </el-col>
@@ -34,24 +41,24 @@
       <el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 12}" :lg="{span: 6}" :xl="{span: 6}" style="margin-bottom:30px;">
         <box-card />
       </el-col>
-    </el-row>
+    </el-row> -->
   </div>
 </template>
 
 <script>
 import PanelGroup from './components/PanelGroup'
 import LineChart from './components/LineChart'
-import RaddarChart from './components/RaddarChart'
+// import RaddarChart from './components/RaddarChart'
 import PieChart from './components/PieChart'
 import BarChart from './components/BarChart'
 import TransactionTable from './components/TransactionTable'
-import TodoList from './components/TodoList'
-import BoxCard from './components/BoxCard'
+// import TodoList from './components/TodoList'
+// import BoxCard from './components/BoxCard'
 
 const lineChartData = {
   newVisitis: {
-    expectedData: [100, 120, 161, 134, 105, 160, 165],
-    actualData: [120, 82, 91, 154, 162, 140, 145]
+    expectedData: [100, 120, 161, 134],
+    actualData: [120, 82, 91, 154]
   },
   messages: {
     expectedData: [200, 192, 120, 144, 160, 130, 140],
@@ -72,12 +79,12 @@ export default {
   components: {
     PanelGroup,
     LineChart,
-    RaddarChart,
+    // RaddarChart,
     PieChart,
     BarChart,
-    TransactionTable,
-    TodoList,
-    BoxCard
+    TransactionTable
+    // TodoList
+    // BoxCard
   },
   data() {
     return {
