@@ -77,6 +77,14 @@ export function queryPlaceSelectoin() {
   })
 }
 
+export function queryTagSelectoin() {
+  return request({
+    url: '/query/get_tag_selection',
+    method: 'post',
+    baseURL: 'http://localhost:57680'
+  })
+}
+
 export function testPlaceList() {
   return request({
     url: '/query/get_place_list',

@@ -252,19 +252,19 @@ export const asyncRoutes = [
       {
         path: 'export-selected-excel-place',
         component: () => import('@/views/excel/select-excel-place'),
-        name: 'SelectExcel',
+        name: 'SelectExcelPlace',
         meta: { title: 'selectExcelPlace' }
       },
       {
         path: 'export-selected-excel-list',
         component: () => import('@/views/excel/select-excel-list'),
-        name: 'SelectExcel',
+        name: 'SelectExcelList',
         meta: { title: 'selectExcelList' }
       },
       {
         path: 'export-selected-excel-tag',
         component: () => import('@/views/excel/select-excel-tag'),
-        name: 'SelectExcel',
+        name: 'SelectExcelTag',
         meta: { title: 'selectExcelTag' }
       }
       // {

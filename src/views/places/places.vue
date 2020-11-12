@@ -69,7 +69,7 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="queryInfo" />
 
-    <el-dialog title="Detail" :visible.sync="dialogFormVisible" width="30%">
+    <el-dialog title="Detail" :visible.sync="dialogFormVisible" width="40%">
       <el-tabs v-model="activeName" type="card">
         <el-tab-pane label="標籤" name="first">
           <el-table
@@ -131,7 +131,7 @@
 </template>
 
 <script>
-import { fetchList, updateArticle, queryPlaceInfoList } from '@/api/article'
+import { fetchList, queryPlaceInfoList } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -153,8 +153,8 @@ export default {
     return {
       tableKey: 0,
       list: null,
-      tagList: null,
-      placeList: null,
+      tagList: [],
+      placeList: [],
       total: 0,
       listLoading: true,
       activeName: 'first',
@@ -259,40 +259,12 @@ export default {
     //   })
     // },
     handleUpdate(row) {
-      this.tagList = Object.assign({}, row.tagInfo)
-      this.placeList = Object.assign({}, row.listInfo)
+      this.tagList = Object.assign([], row.tagInfo)
+      this.placeList = Object.assign([], row.listInfo)
       console.log(typeof (this.tagList))
       console.log(this.placeList)
       // this.dialogStatus = 'update'
       this.dialogFormVisible = true
-    },
-    updateData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          const tempData = Object.assign({}, this.temp)
-          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateArticle(tempData).then(() => {
-            const index = this.list.findIndex(v => v.id === this.temp.id)
-            this.list.splice(index, 1, this.temp)
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '更新成功',
-              type: 'success',
-              duration: 2000
-            })
-          })
-        }
-      })
-    },
-    handleDelete(row, index) {
-      this.$notify({
-        title: '成功',
-        message: '删除成功',
-        type: 'success',
-        duration: 2000
-      })
-      this.list.splice(index, 1)
     },
     getSortClass: function(key) {
       const sort = this.listQuery.sort

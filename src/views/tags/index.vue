@@ -1,18 +1,58 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" :placeholder="$t('tag.searchTitle')" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-select v-model="listQuery.importance" :placeholder="$t('tag.searchItem')" clearable style="width: 120px;margin-left:10px;" class="filter-item">
-        <el-option v-for="item in searchItem" :key="item" :label="item" :value="item" />
+      <el-input
+        v-model="listQuery.title"
+        :placeholder="$t('tag.searchTitle')"
+        style="width: 200px;"
+        class="filter-item"
+        @keyup.enter.native="handleFilter"
+      />
+      <el-select
+        v-model="listQuery.importance"
+        :placeholder="$t('tag.searchItem')"
+        clearable
+        style="width: 120px;margin-left:10px;"
+        class="filter-item"
+      >
+        <el-option
+          v-for="item in placeSelection"
+          :key="item.place_id"
+          :label="item.name"
+          :value="item.place_id"
+        />
       </el-select>
-      <el-select v-model="listQuery.sort" style="width: 140px;margin-left:10px;" class="filter-item" @change="handleFilter">
-        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
+      <el-select
+        v-model="listQuery.sort"
+        style="width: 140px;margin-left:10px;"
+        class="filter-item"
+        @change="handleFilter"
+      >
+        <el-option
+          v-for="item in sortOptions"
+          :key="item.key"
+          :label="item.label"
+          :value="item.key"
+        />
       </el-select>
-      <el-button v-waves class="filter-item" style="margin-left:10px;" type="primary" icon="el-icon-search" @click="handleFilter">
-        {{ $t('tag.search') }}
+      <el-button
+        v-waves
+        class="filter-item"
+        style="margin-left:10px;"
+        type="primary"
+        icon="el-icon-search"
+        @click="handleFilter"
+      >
+        {{ $t("tag.search") }}
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-        {{ $t('tag.add') }}
+      <el-button
+        class="filter-item"
+        style="margin-left: 10px;"
+        type="primary"
+        icon="el-icon-edit"
+        @click="handleCreate"
+      >
+        {{ $t("tag.add") }}
       </el-button>
     </div>
 
@@ -26,54 +66,81 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column :label="$t('tag.id')" prop="id" sortable="custom" align="center" width="150" :class-name="getSortClass('id')">
-        <template slot-scope="{row}">
+      <el-table-column
+        :label="$t('tag.id')"
+        prop="id"
+        sortable="custom"
+        align="center"
+        width="150"
+        :class-name="getSortClass('id')"
+      >
+        <template slot-scope="{ row }">
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('tag.placeName')" align="center">
-        <template slot-scope="{row}">
+        <template slot-scope="{ row }">
           <span>{{ row.place_name }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('tag.tagName')" class-name="status-col">
-        <template slot-scope="{row}">
-          <el-tag :type="row.status | statusFilter">
+        <template slot-scope="{ row }">
+          <el-tag :type="row.status">
             {{ row.tag_name }}
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column :label="$t('tag.userName')" align="center">
-        <template slot-scope="{row}">
+        <template slot-scope="{ row }">
           <span>{{ row.user_name }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('tag.actions')" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="{row,$index}">
+      <el-table-column
+        :label="$t('tag.actions')"
+        align="center"
+        class-name="small-padding fixed-width"
+      >
+        <template slot-scope="{ row, $index }">
           <el-button type="primary" @click="handleUpdate(row)">
-            {{ $t('tag.edit') }}
+            {{ $t("tag.edit") }}
           </el-button>
-          <el-button v-if="row.status!='deleted'" type="danger" @click="handleDelete(row,$index)">
-            {{ $t('tag.delete') }}
+          <el-button
+            v-if="row.status != 'deleted'"
+            type="danger"
+            @click="handleDelete(row, $index)"
+          >
+            {{ $t("tag.delete") }}
           </el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="queryList" />
+    <pagination
+      v-show="total > 0"
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.limit"
+      @pagination="queryList"
+    />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="30%">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="80px" style="width: 250px; margin-left:20px;">
-        <el-form-item :label="$t('tag.placeName')" prop="title">
-          <el-input v-model="temp.place_name" />
-        </el-form-item>
-        <el-form-item :label="$t('tag.tagName')" prop="type">
-          <el-select v-model="temp.tag_name" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
+    <el-dialog
+      :title="textMap[dialogStatus]"
+      :visible.sync="dialogFormVisible"
+      width="25%"
+    >
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="110px" style="width: 300px; margin-left:10px;">
+        <el-form-item :label="$t('tag.placeName')" prop="placeName">
+          <el-select v-model="temp.place_id" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in placeSelection" :key="item.place_id" :label="item.name" :value="item.place_id" />
           </el-select>
         </el-form-item>
-        <el-form-item :label="$t('tag.userName')" prop="title">
-          <el-input v-model="temp.user_name" />
+        <el-form-item :label="$t('tag.tagName')" :class="'is-required'" prop="tagName" :required="isHave">
+          <el-select v-model="temp.tag_id" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in tagSelection" :key="item.tagId" :label="item.tagName" :value="item.tagId" />
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="$t('tag.userName')">
+          <el-input v-model="temp.user_name" disabled />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" align="center">
@@ -89,45 +156,26 @@
 </template>
 
 <script>
-import { fetchList, fetchPv, createArticle, updateArticle, queryTagList } from '@/api/article'
-import waves from '@/directive/waves' // waves directive
-import { parseTime } from '@/utils'
-import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-
-const calendarTypeOptions = [
-  { key: 'CN', display_name: 'China' },
-  { key: 'US', display_name: 'USA' },
-  { key: 'JP', display_name: 'Japan' },
-  { key: 'EU', display_name: 'Eurozone' }
-]
-
-// arr to obj, such as { CN : "China", US : "USA" }
-const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
-  acc[cur.key] = cur.display_name
-  return acc
-}, {})
+import {
+  queryTagSelectoin,
+  queryPlaceSelectoin,
+  createArticle,
+  updateArticle,
+  queryTagList
+} from '@/api/article'
+import waves from '@/directive/waves'
+import Pagination from '@/components/Pagination'
 
 export default {
   name: 'ComplexTable',
   components: { Pagination },
   directives: { waves },
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    },
-    typeFilter(type) {
-      return calendarTypeKeyValue[type]
-    }
-  },
   data() {
     return {
       tableKey: 0,
       list: null,
+      placeSelection: null,
+      tagSelection: null,
       total: 0,
       listLoading: true,
       listQuery: {
@@ -138,15 +186,14 @@ export default {
         type: undefined,
         sort: '+id'
       },
-      importanceOptions: [1, 2, 3],
-      calendarTypeOptions,
-      sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
-      statusOptions: ['published', 'draft', 'deleted'],
-      showReviewer: false,
+      sortOptions: [
+        { label: 'ID Ascending', key: '+id' },
+        { label: 'ID Descending', key: '-id' }
+      ],
       temp: {
         id: undefined,
-        place_name: '',
-        tag_name: '',
+        place_id: undefined,
+        tag_id: undefined,
         user_name: ''
       },
       dialogFormVisible: false,
@@ -154,41 +201,57 @@ export default {
       textMap: {
         update: 'Edit',
         create: 'Create'
-      },
-      dialogPvVisible: false,
-      pvData: [],
-      rules: {
-        type: [{ required: true, message: 'type is required', trigger: 'change' }],
-        timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        title: [{ required: true, message: 'title is required', trigger: 'blur' }]
-      },
-      downloadLoading: false
+      }
+    }
+  },
+  computed: {
+    isHave: function() {
+      return !this.temp.tag_id
+    },
+    rules() {
+      const tagRules = {
+        // tagName: [
+        //   {
+        //     required: true,
+        //     message: this.$t('tag.tagNameRule'),
+        //     trigger: 'change'
+        //   }
+        // ],
+        placeName: [
+          {
+            required: true,
+            message: this.$t('tag.placeNameRule'),
+            trigger: 'change'
+          }
+        ]
+      }
+      return tagRules
     }
   },
   created() {
     // this.getList()
     this.queryList()
+    this.getPlaceSelection()
+    this.getTagSelection()
   },
   methods: {
-    getList() {
-      this.listLoading = true
-      fetchList(this.listQuery).then(response => {
-        // this.list = response.data.items
-        // this.total = response.data.total
-
-        // Just to simulate the time of the request
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 1000)
-      })
-    },
     queryList() {
-      // this.listLoading = true
+      this.listLoading = true
       queryTagList().then(response => {
         this.list = response.data
         this.total = response.total
         this.listLoading = false
         // console.log(this.list)
+      })
+    },
+    getPlaceSelection() {
+      queryPlaceSelectoin().then(response => {
+        this.placeSelection = response.data
+      })
+    },
+    getTagSelection() {
+      queryTagSelectoin().then(response => {
+        this.tagSelection = response.data
       })
     },
     handleFilter() {
@@ -219,13 +282,14 @@ export default {
     resetTemp() {
       this.temp = {
         id: undefined,
-        place_name: '',
-        tag_name: '',
+        place_id: undefined,
+        tag_id: undefined,
         user_name: ''
       }
     },
     handleCreate() {
       this.resetTemp()
+      this.temp.user_name = 'Khito'
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -233,7 +297,7 @@ export default {
       })
     },
     createData() {
-      this.$refs['dataForm'].validate((valid) => {
+      this.$refs['dataForm'].validate(valid => {
         if (valid) {
           this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
           this.temp.author = 'vue-element-admin'
@@ -285,35 +349,6 @@ export default {
         duration: 2000
       })
       this.list.splice(index, 1)
-    },
-    handleFetchPv(pv) {
-      fetchPv(pv).then(response => {
-        this.pvData = response.data.pvData
-        this.dialogPvVisible = true
-      })
-    },
-    handleDownload() {
-      this.downloadLoading = true
-      import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-        const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
-        const data = this.formatJson(filterVal)
-        excel.export_json_to_excel({
-          header: tHeader,
-          data,
-          filename: 'table-list'
-        })
-        this.downloadLoading = false
-      })
-    },
-    formatJson(filterVal) {
-      return this.list.map(v => filterVal.map(j => {
-        if (j === 'timestamp') {
-          return parseTime(v[j])
-        } else {
-          return v[j]
-        }
-      }))
     },
     getSortClass: function(key) {
       const sort = this.listQuery.sort

@@ -157,7 +157,7 @@ export default {
       privacyOption: [
         { key: 0, label: this.$t('placeList.public') },
         { key: 1, label: this.$t('placeList.private') },
-        { key: 2, label: this.$t('placeList.personal') }
+        { key: 2, label: this.$t('placeList.hito') }
       ],
       sortOptions: [{ label: this.$t('common.idAscending'), key: '+id' }, { label: this.$t('common.idDescending'), key: '-id' }],
       showReviewer: false,

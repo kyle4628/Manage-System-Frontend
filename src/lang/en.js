@@ -157,7 +157,9 @@ export default {
     actions: 'Actions',
     add: 'Create',
     edit: 'Edit',
-    delete: 'Delete'
+    delete: 'Delete',
+    tagNameRule: 'Tag name is required',
+    placeNameRule: 'Place name is required'
   },
   place: {
     searchTitle: 'Search',

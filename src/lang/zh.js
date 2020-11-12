@@ -147,7 +147,9 @@ export default {
     actions: '操作',
     add: '新增',
     edit: '編輯',
-    delete: '刪除'
+    delete: '刪除',
+    tagNameRule: '此項目必填',
+    placeNameRule: '此項目必填'
   },
   place: {
     searchTitle: '請輸入項目',
