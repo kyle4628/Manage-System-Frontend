@@ -1,50 +1,6 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input
-        v-model="listQuery.title"
-        :placeholder="$t('tag.searchTitle')"
-        style="width: 200px;"
-        class="filter-item"
-        @keyup.enter.native="handleFilter"
-      />
-      <el-select
-        v-model="listQuery.importance"
-        :placeholder="$t('tag.searchItem')"
-        clearable
-        style="width: 120px;margin-left:10px;"
-        class="filter-item"
-      >
-        <el-option
-          v-for="item in placeSelection"
-          :key="item.place_id"
-          :label="item.name"
-          :value="item.place_id"
-        />
-      </el-select>
-      <el-select
-        v-model="listQuery.sort"
-        style="width: 140px;margin-left:10px;"
-        class="filter-item"
-        @change="handleFilter"
-      >
-        <el-option
-          v-for="item in sortOptions"
-          :key="item.key"
-          :label="item.label"
-          :value="item.key"
-        />
-      </el-select>
-      <el-button
-        v-waves
-        class="filter-item"
-        style="margin-left:10px;"
-        type="primary"
-        icon="el-icon-search"
-        @click="handleFilter"
-      >
-        {{ $t("tag.search") }}
-      </el-button>
       <el-button
         class="filter-item"
         style="margin-left: 10px;"
@@ -124,18 +80,18 @@
     />
 
     <el-dialog
-      :title="textMap[dialogStatus]"
-      :visible.sync="dialogFormVisible"
+      :visible.sync="dialogCreateFormVisible"
       width="25%"
     >
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="110px" style="width: 300px; margin-left:10px;">
-        <el-form-item :label="$t('tag.placeName')" prop="placeName">
-          <el-select v-model="temp.place_id" class="filter-item" placeholder="Please select">
+      <h3>Create</h3>
+      <el-form ref="dataForm" :model="temp" label-position="left" label-width="110px" style="width: 300px; margin-left:10px;">
+        <el-form-item :label="$t('tag.placeName')" :class="'is-required'" prop="placeName" :required="!isPlaceSelected">
+          <el-select v-model="updateModel.place_id" class="filter-item" placeholder="Please select">
             <el-option v-for="item in placeSelection" :key="item.place_id" :label="item.name" :value="item.place_id" />
           </el-select>
         </el-form-item>
-        <el-form-item :label="$t('tag.tagName')" :class="'is-required'" prop="tagName" :required="isHave">
-          <el-select v-model="temp.tag_id" class="filter-item" placeholder="Please select">
+        <el-form-item :label="$t('tag.tagName')" :class="'is-required'" prop="tagName">
+          <el-select v-model="temp.add" multiple class="filter-item" placeholder="Please select">
             <el-option v-for="item in tagSelection" :key="item.tagId" :label="item.tagName" :value="item.tagId" />
           </el-select>
         </el-form-item>
@@ -144,10 +100,40 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" align="center">
-        <el-button @click="dialogFormVisible = false">
+        <el-button @click="dialogCreateFormVisible = false">
           {{ $t('table.cancel') }}
         </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
+        <el-button type="primary" @click="createData">
+          {{ $t('table.confirm') }}
+        </el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog
+      :visible.sync="dialogUpdateFormVisible"
+      width="25%"
+    >
+      <h3>Update</h3>
+      <el-form ref="dataForm" :model="updateModel" label-position="left" label-width="110px" style="width: 300px; margin-left:10px;">
+        <el-form-item :label="$t('tag.placeName')" :class="'is-required'" prop="placeName" :required="!isPlaceSelected">
+          <el-select v-model="updateModel.place_id" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in placeSelection" :key="item.place_id" :label="item.name" :value="item.place_id" />
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="$t('tag.tagName')" :class="'is-required'" prop="tagName">
+          <el-select v-model="updateModel.add" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in tagSelection" :key="item.tagId" :label="item.tagName" :value="item.tagId" />
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="$t('tag.userName')">
+          <el-input v-model="updateModel.user_name" disabled />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer" align="center">
+        <el-button @click="dialogUpdateFormVisible = false">
+          {{ $t('table.cancel') }}
+        </el-button>
+        <el-button type="primary" @click="updateData">
           {{ $t('table.confirm') }}
         </el-button>
       </div>
@@ -159,9 +145,9 @@
 import {
   queryTagSelectoin,
   queryPlaceSelectoin,
-  createArticle,
   updateArticle,
-  queryTagList
+  queryTagList,
+  createTagRelation
 } from '@/api/article'
 import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
@@ -191,12 +177,18 @@ export default {
         { label: 'ID Descending', key: '-id' }
       ],
       temp: {
-        id: undefined,
+        place_id: undefined,
+        add: [],
+        remove: [],
+        newTags: []
+      },
+      updateModel: {
         place_id: undefined,
         tag_id: undefined,
         user_name: ''
       },
-      dialogFormVisible: false,
+      dialogCreateFormVisible: false,
+      dialogUpdateFormVisible: false,
       dialogStatus: '',
       textMap: {
         update: 'Edit',
@@ -205,31 +197,14 @@ export default {
     }
   },
   computed: {
-    isHave: function() {
-      return !this.temp.tag_id
+    isTagSelected: function() {
+      return !!this.temp.tag_id
     },
-    rules() {
-      const tagRules = {
-        // tagName: [
-        //   {
-        //     required: true,
-        //     message: this.$t('tag.tagNameRule'),
-        //     trigger: 'change'
-        //   }
-        // ],
-        placeName: [
-          {
-            required: true,
-            message: this.$t('tag.placeNameRule'),
-            trigger: 'change'
-          }
-        ]
-      }
-      return tagRules
+    isPlaceSelected: function() {
+      return !!this.temp.place_id
     }
   },
   created() {
-    // this.getList()
     this.queryList()
     this.getPlaceSelection()
     this.getTagSelection()
@@ -241,7 +216,6 @@ export default {
         this.list = response.data
         this.total = response.total
         this.listLoading = false
-        // console.log(this.list)
       })
     },
     getPlaceSelection() {
@@ -257,13 +231,6 @@ export default {
     handleFilter() {
       this.listQuery.page = 1
       this.list.reverse()
-    },
-    handleModifyStatus(row, status) {
-      this.$message({
-        message: '操作成功',
-        type: 'success'
-      })
-      row.status = status
     },
     sortChange(data) {
       const { prop, order } = data
@@ -281,65 +248,73 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        id: undefined,
         place_id: undefined,
-        tag_id: undefined,
-        user_name: ''
+        add: [],
+        remove: [],
+        newTags: []
       }
     },
     handleCreate() {
       this.resetTemp()
-      this.temp.user_name = 'Khito'
+      this.dialogCreateFormVisible = true
       this.dialogStatus = 'create'
-      this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
     },
     createData() {
-      this.$refs['dataForm'].validate(valid => {
+      console.log('this.temp ', this.temp)
+      // this.$refs['dataForm'].validate(valid => {
+      //   if (valid) {
+      createTagRelation(this.temp).then((response) => {
+        // this.list.unshift(this.temp)
+        if (response.status === 1) {
+          this.dialogCreateFormVisible = false
+          this.queryList()
+          this.$notify({
+            title: '成功',
+            message: '新增成功',
+            type: 'success',
+            duration: 2000
+          })
+        } else {
+          this.dialogCreateFormVisible = false
+          this.$notify({
+            title: '失敗',
+            message: '新增失敗',
+            type: 'danger',
+            duration: 2000
+          })
+        }
+        //   })
+        // }
+      })
+    },
+    handleUpdate(row) {
+      this.updateModel = Object.assign({}, row)
+      this.dialogStatus = 'update'
+      this.dialogUpdateFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    updateData() {
+      this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          this.temp.author = 'vue-element-admin'
-          createArticle(this.temp).then(() => {
-            this.list.unshift(this.temp)
-            this.dialogFormVisible = false
+          const tempData = Object.assign({}, this.updateModel)
+          updateArticle(tempData).then(() => {
+            const index = this.list.findIndex(v => v.id === this.temp.id)
+            this.list.splice(index, 1, this.temp)
+            this.dialogUpdateFormVisible = false
             this.$notify({
               title: '成功',
-              message: '创建成功',
+              message: '更新成功',
               type: 'success',
               duration: 2000
             })
           })
         }
       })
-    },
-    handleUpdate(row) {
-      this.temp = Object.assign({}, row) // copy obj
-      // this.temp.timestamp = new Date(this.temp.timestamp)
-      this.dialogStatus = 'update'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-    },
-    updateData() {
-      // this.$refs['dataForm'].validate((valid) => {
-      // if (valid) {
-      const tempData = Object.assign({}, this.temp)
-      updateArticle(tempData).then(() => {
-        const index = this.list.findIndex(v => v.id === this.temp.id)
-        this.list.splice(index, 1, this.temp)
-        this.dialogFormVisible = false
-        this.$notify({
-          title: '成功',
-          message: '更新成功',
-          type: 'success',
-          duration: 2000
-        })
-      })
-      // }
-      // })
     },
     handleDelete(row, index) {
       this.$notify({

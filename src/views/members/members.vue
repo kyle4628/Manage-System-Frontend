@@ -266,7 +266,7 @@ export default {
     },
     resetCreateModel() {
       this.createModel = {
-        name: '',
+        username: '',
         email: '',
         password: ''
       }
@@ -283,7 +283,7 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.createModel.name = this.temp.name
+          this.createModel.username = this.temp.name
           this.createModel.email = this.temp.email
           this.createModel.password = this.temp.password
           this.temp.id = this.total + 1
@@ -292,16 +292,25 @@ export default {
           var time = today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds()
           this.temp.createdTime = date + ' ' + time
           this.temp.authority = 1
-          createMember(this.createModel).then(() => {
-            this.list.push(this.temp)
-            this.getList()
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '新增成功',
-              type: 'success',
-              duration: 2000
-            })
+          createMember(this.createModel).then((response) => {
+            if (response.status === 1) {
+              this.list.push(this.temp)
+              this.getUserList()
+              this.$notify({
+                title: '成功',
+                message: response.msg,
+                type: 'success',
+                duration: 2000
+              })
+              this.dialogFormVisible = false
+            } else {
+              this.$notify({
+                title: '失敗',
+                message: response.msg,
+                type: 'danger',
+                duration: 2000
+              })
+            }
           })
         }
       })

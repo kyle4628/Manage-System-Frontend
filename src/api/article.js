@@ -110,6 +110,18 @@ export function createMember(data) {
   })
 }
 
+export function createTagRelation(data) {
+  return request({
+    url: '/user/modify_place_tag',
+    method: 'post',
+    data,
+    baseURL: 'http://localhost:57680',
+    headers: {
+      session_id: 1
+    }
+  })
+}
+
 export function createList(data) {
   return request({
     url: '/user/create_list',

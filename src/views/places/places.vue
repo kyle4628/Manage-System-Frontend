@@ -60,8 +60,8 @@
       </el-table-column>
       <el-table-column :label="$t('table.actions')" align="center" width="210" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button type="primary" @click="handleUpdate(row)">
-            Detail
+          <el-button type="primary" @click="showDetail(row)">
+            {{ $t('place.detail') }}
           </el-button>
         </template>
       </el-table-column>
@@ -69,9 +69,10 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="queryInfo" />
 
-    <el-dialog title="Detail" :visible.sync="dialogFormVisible" width="40%">
+    <el-dialog :label="dialogTitle[detail]" :visible.sync="dialogFormVisible" width="40%">
+      <h3>{{ $t('place.detail') }}</h3>
       <el-tabs v-model="activeName" type="card">
-        <el-tab-pane label="標籤" name="first">
+        <el-tab-pane :label="$t('place.tagTitle')" name="first">
           <el-table
             :data="tagList"
             border
@@ -79,41 +80,41 @@
             highlight-current-row
             style="width: 100%;"
           >
-            <el-table-column label="標籤名稱" align="center">
+            <el-table-column :label="$t('place.tagName')" align="center">
               <template slot-scope="{row}">
                 <span>{{ row.tagName }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="標籤作者" align="center">
+            <el-table-column :label="$t('place.creator')" align="center">
               <template slot-scope="{row}">
                 <span>{{ row.tagCreatorName }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="建立時間" align="center">
+            <el-table-column :label="$t('place.createdTime')" align="center">
               <template slot-scope="{row}">
                 <span>{{ row.tagCreatedTime }}</span>
               </template>
             </el-table-column>
           </el-table>
         </el-tab-pane>
-        <el-tab-pane label="地點清單" name="second">
+        <el-tab-pane :label="$t('place.listTitle')" name="second">
           <el-table
             :data="placeList"
             border
             highlight-current-row
             style="width: 100%;"
           >
-            <el-table-column label="清單名稱" align="center">
+            <el-table-column :label="$t('place.listName')" align="center">
               <template slot-scope="{row}">
                 <span>{{ row.placeListName }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="清單作者" align="center">
+            <el-table-column :label="$t('place.creator')" align="center">
               <template slot-scope="{row}">
                 <span>{{ row.listCreatorName }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="建立時間" align="center">
+            <el-table-column :label="$t('place.createdTime')" align="center">
               <template slot-scope="{row}">
                 <span>{{ row.listCreatedTime }}</span>
               </template>
@@ -123,7 +124,7 @@
       </el-tabs>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
-          {{ $t('table.cancel') }}
+          {{ $t('place.close') }}
         </el-button>
       </div>
     </el-dialog>
@@ -131,7 +132,7 @@
 </template>
 
 <script>
-import { fetchList, queryPlaceInfoList } from '@/api/article'
+import { queryPlaceInfoList } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -158,47 +159,26 @@ export default {
       total: 0,
       listLoading: true,
       activeName: 'first',
+      dialogTitle: {
+        detail: this.$t('place.detail')
+      },
       listQuery: {
         page: 1,
-        limit: 20,
+        limit: 100,
         importance: undefined,
         title: undefined,
         type: undefined,
         sort: '+id'
       },
       sortOptions: [{ label: this.$t('common.idAscending'), key: '+id' }, { label: this.$t('common.idDescending'), key: '-id' }],
-      showReviewer: false,
-      temp: {
-        id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        type: '',
-        status: 'published'
-      },
       dialogFormVisible: false,
       dialogStatus: ''
     }
   },
   created() {
-    // this.getList()
     this.queryInfo()
   },
   methods: {
-    getList() {
-      this.listLoading = true
-      fetchList(this.listQuery).then(response => {
-        // console.log(response.data.items)
-        // this.list = response.data.items
-        // this.total = response.data.total
-
-        // Just to simulate the time of the request
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 1000)
-      })
-    },
     queryInfo() {
       this.listLoading = true
       queryPlaceInfoList().then(response => {
@@ -210,13 +190,6 @@ export default {
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
-    },
-    handleModifyStatus(row, status) {
-      this.$message({
-        message: '操作成功',
-        type: 'success'
-      })
-      row.status = status
     },
     sortChange(data) {
       const { prop, order } = data
@@ -232,38 +205,12 @@ export default {
       }
       this.handleFilter()
     },
-    // handleCreate() {
-    //   this.resetTemp()
-    //   this.dialogStatus = 'create'
-    //   this.dialogFormVisible = true
-    //   this.$nextTick(() => {
-    //     this.$refs['dataForm'].clearValidate()
-    //   })
-    // },
-    // createData() {
-    //   this.$refs['dataForm'].validate((valid) => {
-    //     if (valid) {
-    //       this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-    //       this.temp.author = 'vue-element-admin'
-    //       createArticle(this.temp).then(() => {
-    //         this.list.unshift(this.temp)
-    //         this.dialogFormVisible = false
-    //         this.$notify({
-    //           title: '成功',
-    //           message: '创建成功',
-    //           type: 'success',
-    //           duration: 2000
-    //         })
-    //       })
-    //     }
-    //   })
-    // },
-    handleUpdate(row) {
+    showDetail(row) {
       this.tagList = Object.assign([], row.tagInfo)
       this.placeList = Object.assign([], row.listInfo)
-      console.log(typeof (this.tagList))
-      console.log(this.placeList)
-      // this.dialogStatus = 'update'
+      this.activeName = 'first'
+      // console.log(typeof (this.tagList))
+      // console.log(this.placeList)
       this.dialogFormVisible = true
     },
     getSortClass: function(key) {
