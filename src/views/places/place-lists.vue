@@ -116,6 +116,20 @@
       </div>
     </el-dialog>
 
+    <el-dialog>
+      <div class="block">
+        <el-timeline>
+          <el-timeline-item
+            v-for="(activity, index) in activities"
+            :key="index"
+            :icon="el-icon-place"
+            :timestamp="activity.timestamp"
+          >
+            {{ activity.content }}
+          </el-timeline-item>
+        </el-timeline>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -178,6 +192,7 @@ export default {
         places: null
       },
       dialogFormVisible: false,
+      dialogTimelineVisible: false,
       dialogStatus: '',
       textMap: {
         update: this.$t('placeList.edit'),
