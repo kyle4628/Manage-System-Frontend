@@ -127,3 +127,16 @@ export function get_place_tag_count() {
     baseURL: 'http://localhost:57680'
   })
 }
+
+export function sendEmail(data) {
+  return request({
+    url: '/query/send_email_test',
+    method: 'post',
+    data,
+    xhrFields: {
+      withCredentials: true
+    },
+    contentType: 'application/json',
+    baseURL: 'http://localhost:57680'
+  })
+}

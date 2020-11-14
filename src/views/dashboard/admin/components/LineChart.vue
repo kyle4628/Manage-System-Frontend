@@ -7,7 +7,6 @@ import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
 import { get_user_growth } from '@/api/user'
-
 export default {
   mixins: [resize],
   props: {
@@ -72,14 +71,15 @@ export default {
         this.listUserGrowthKey = []
         this.listUserGrowthCount = this.listUserGrowth.map(item => Object.values(item)[0])
         this.listUserGrowthKey = this.listUserGrowth.map(item => Object.values(item)[1])
+        // console.log(Object.values(this.listUserGrowthKey))
         const datas = { key: this.listUserGrowthKey, count: this.listUserGrowthCount }
         return datas
       }).then(result => {
         this.chart.setOption({
           xAxis: {
-          // data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-            // data:Object.values(this.listUserGrowthKey),
-            // data:["2020-10-27", "2020-11-06", "2020-11-09", "noDateInfo"],
+            // data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          // data:Object.values(this.listUserGrowthKey),
+          // data:["2020-10-27", "2020-11-06", "2020-11-09", "noDateInfo"],
             data: result.key,
             boundaryGap: false,
             axisTick: {
@@ -106,10 +106,10 @@ export default {
             }
           },
           legend: {
-            data: ['expected', 'actual']
+            data: ['期望值', '實際值']
           },
           series: [{
-            name: 'expected', itemStyle: {
+            name: '期望值', itemStyle: {
               normal: {
                 color: '#FF005A',
                 lineStyle: {
@@ -125,7 +125,7 @@ export default {
             animationEasing: 'cubicInOut'
           },
           {
-            name: 'actual',
+            name: '實際值',
             smooth: true,
             type: 'line',
             itemStyle: {

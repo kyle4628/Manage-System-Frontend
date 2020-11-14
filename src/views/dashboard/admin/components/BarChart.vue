@@ -75,7 +75,7 @@ export default {
           },
           xAxis: [{
             type: 'category',
-            data: result.key,
+            data: result.key.splice(0, 10),
             axisTick: {
               alignWithLabel: true
             }
@@ -91,7 +91,7 @@ export default {
             type: 'bar',
             stack: 'vistors',
             barWidth: '60%',
-            data: result.count,
+            data: result.count.splice(0, 10),
             animationDuration
           }, {
             name: '前月份',

@@ -74,7 +74,7 @@
           <el-button type="primary" size="small" @click="handleUpdate(row)">
             {{ $t('member.edit') }}
           </el-button>
-          <el-button type="danger" size="small" @click="handleDelete(row,$index)">
+          <el-button v-if="showReviewer" type="danger" size="small" @click="handleDelete(row,$index)">
             {{ $t('member.delete') }}
           </el-button>
         </template>
@@ -98,6 +98,7 @@
           <el-select v-model="temp.authority" class="filter-item" placeholder="Please select">
             <el-option v-for="item in setOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
+          <el-button v-if="temp.authority===2" @click="handleSendEmail">Send Email</el-button>
         </el-form-item>
         <el-form-item v-if="dialogStatus==='update'" :label="$t('member.created')">
           <el-input v-model="temp.createdTime" disabled />
@@ -120,7 +121,7 @@
 
 <script>
 import { createMember, updateMember } from '@/api/article'
-import { queryUser } from '@/api/user'
+import { queryUser, sendEmail } from '@/api/user'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -143,6 +144,7 @@ export default {
       tableKey: 0,
       list: null,
       total: 0,
+      sendEmailobj: { 'toEmail': null },
       listLoading: true,
       listQuery: {
         page: 1,
@@ -354,6 +356,29 @@ export default {
     getSortClass: function(key) {
       const sort = this.listQuery.sort
       return sort === `+${key}` ? 'ascending' : 'descending'
+    },
+    handleSendEmail() {
+      // const tempData = Object.assign({}, this.temp)
+      this.sendEmailobj.toEmail = this.temp.email
+      sendEmail(this.sendEmailobj).then(response => {
+        console.log(response)
+        if (response.status === 1) {
+          this.$notify({
+            title: '成功',
+            message: '寄信成功',
+            type: 'success',
+            duration: 2000
+          })
+        } else {
+          this.$notify.error({
+            title: '失敗',
+            message: '非有效信箱',
+            // type: 'success',
+            duration: 2000
+          })
+        }
+      }
+      )
     }
   }
 }
