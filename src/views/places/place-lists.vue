@@ -1,16 +1,6 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" :placeholder="$t('placeList.searchTitle')" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-select v-model="listQuery.importance" :placeholder="$t('placeList.searchItem')" clearable style="width: 120px;margin-left:10px;" class="filter-item">
-        <el-option v-for="item in privacyOption" :key="item.key" :label="item.label" :value="item.key" />
-      </el-select>
-      <el-select v-model="listQuery.sort" style="width: 140px;margin-left:10px;" class="filter-item" @change="handleFilter">
-        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
-      </el-select>
-      <el-button v-waves class="filter-item" style="margin-left:10px;" type="primary" icon="el-icon-search" @click="handleFilter">
-        {{ $t('placeList.search') }}
-      </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         {{ $t('placeList.add') }}
       </el-button>
@@ -47,7 +37,7 @@
       </el-table-column>
       <el-table-column :label="$t('placeList.description')" min-width="80px">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.description }}</span>
+          <span class="link-type" @click="handleDetail(row)">{{ row.description }}</span>
           <!-- <el-tag>{{ row.description }}</el-tag> -->
         </template>
       </el-table-column>
@@ -116,16 +106,17 @@
       </div>
     </el-dialog>
 
-    <el-dialog>
+    <el-dialog :visible.sync="dialogTimelineVisible" width="40%">
       <div class="block">
         <el-timeline>
           <el-timeline-item
             v-for="(activity, index) in activities"
             :key="index"
-            :icon="el-icon-place"
-            :timestamp="activity.timestamp"
+            :icon="activity.icon"
+            :type="activity.type"
+            :timestamp="activity.createdTime"
           >
-            {{ activity.content }}
+            {{ activity.placeName }}
           </el-timeline-item>
         </el-timeline>
       </div>
@@ -157,6 +148,7 @@ export default {
       tableKey: 0,
       list: null,
       placeSelection: null,
+      activities: [],
       total: 0,
       listLoading: true,
       listQuery: {
@@ -219,6 +211,7 @@ export default {
       testPlaceList().then(response => {
         this.list = response.data
         this.total = response.total
+        // console.log(this.list)
       })
     },
     getPlaceSelection() {
@@ -341,6 +334,10 @@ export default {
         duration: 2000
       })
       this.list.splice(index, 1)
+    },
+    handleDetail(row) {
+      this.activities = Object.assign([], row.timelineItmes)
+      this.dialogTimelineVisible = true
     },
     getSortClass: function(key) {
       const sort = this.listQuery.sort

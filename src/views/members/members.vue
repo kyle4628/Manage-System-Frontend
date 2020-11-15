@@ -1,19 +1,6 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" :placeholder="$t('member.searchTitle')" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-select v-model="listQuery.importance" :placeholder="$t('member.searchItem')" clearable style="width: 120px;margin-left:10px;" class="filter-item">
-        <el-option v-for="item in searchItem" :key="item" :label="item" :value="item" />
-      </el-select>
-      <el-select v-model="listQuery.type" :placeholder="$t('member.memberStatus')" clearable class="filter-item" style="width: 130px;margin-left:10px;">
-        <el-option v-for="item in setOptions" :key="item.value" :label="item.label" :value="item.value" />
-      </el-select>
-      <el-select v-model="listQuery.sort" style="width: 140px;margin-left:10px;" class="filter-item" @change="handleFilter">
-        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
-      </el-select>
-      <el-button v-waves class="filter-item" style="margin-left:10px;" type="primary" icon="el-icon-search" @click="handleFilter">
-        {{ $t('table.search') }}
-      </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         {{ $t('member.add') }}
       </el-button>
@@ -32,17 +19,17 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column :label="$t('member.id')" prop="id" sortable="custom" align="center" width="110" :class-name="getSortClass('id')">
+      <el-table-column :label="$t('member.id')" prop="id" sortable="custom" align="center" width="90" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('member.name')" width="120px" align="center">
+      <el-table-column :label="$t('member.name')" width="110px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('member.email')" min-width="200px">
+      <el-table-column :label="$t('member.email')" min-width="170px">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.email }}</span>
         </template>
@@ -373,7 +360,7 @@ export default {
           this.$notify.error({
             title: '失敗',
             message: '非有效信箱',
-            // type: 'success',
+            type: 'fail',
             duration: 2000
           })
         }
