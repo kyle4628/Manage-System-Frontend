@@ -285,7 +285,7 @@ export default {
             confirmButtonText: this.$t('member.confirm'),
             cancelButtonText: this.$t('member.cancel'),
             type: 'warning'
-          }).then(async() => {
+          }).then(() => {
             createMember(this.createModel).then((response) => {
               if (response.status === 1) {
                 this.list.push(this.temp)

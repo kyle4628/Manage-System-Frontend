@@ -139,100 +139,8 @@ export const asyncRoutes = [
       }
     ]
   },
-  {
-    path: '/permission',
-    component: Layout,
-    redirect: '/permission/page',
-    alwaysShow: true, // will always show the root menu
-    name: 'Permission',
-    meta: {
-      title: 'permission',
-      icon: 'lock',
-      roles: ['admin', 'editor'] // you can set roles in root nav
-    },
-    children: [
-      {
-        path: 'page',
-        component: () => import('@/views/permission/page'),
-        name: 'PagePermission',
-        meta: {
-          title: 'pagePermission',
-          roles: ['admin'] // or you can only set roles in sub nav
-        }
-      },
-      {
-        path: 'directive',
-        component: () => import('@/views/permission/directive'),
-        name: 'DirectivePermission',
-        meta: {
-          title: 'directivePermission'
-          // if do not set roles, means: this page does not require permission
-        }
-      },
-      {
-        path: 'role',
-        component: () => import('@/views/permission/role'),
-        name: 'RolePermission',
-        meta: {
-          title: 'rolePermission',
-          roles: ['admin']
-        }
-      },
-      {
-        path: 'session-test',
-        component: () => import('@/views/permission/session-test'),
-        name: 'session-test',
-        meta: {
-          title: 'session-test'
-        }
-      },
-      {
-        path: 'session-test-empty',
-        component: () => import('@/views/permission/session-test-empty'),
-        name: 'session-test-empty',
-        meta: {
-          title: 'session-test-empty'
-        }
-      }
-    ]
-  },
 
   chartsRouter,
-  // nestedRouter,
-  // tableRouter,
-
-  // {
-  //   path: '/example',
-  //   component: Layout,
-  //   redirect: '/example/list',
-  //   name: 'Example',
-  //   meta: {
-  //     title: 'example',
-  //     icon: 'el-icon-s-help'
-  //   },
-  //   children: [
-  //     {
-  //       path: 'create',
-  //       component: () => import('@/views/example/create'),
-  //       name: 'CreateArticle',
-  //       meta: { title: 'createArticle', icon: 'edit' }
-  //     },
-  //     {
-  //       path: 'edit/:id(\\d+)',
-  //       component: () => import('@/views/example/edit'),
-  //       name: 'EditArticle',
-  //       meta: { title: 'editArticle', noCache: true, activeMenu: '/example/list' },
-  //       hidden: true
-  //     },
-  //     {
-  //       path: 'list',
-  //       component: () => import('@/views/example/list'),
-  //       name: 'ArticleList',
-  //       meta: { title: 'articleList', icon: 'list' }
-  //     }
-  //   ]
-  // },
-
   {
     path: '/excel',
     component: Layout,
@@ -243,12 +151,6 @@ export const asyncRoutes = [
       icon: 'excel'
     },
     children: [
-      // {
-      //   path: 'export-excel-tag',
-      //   component: () => import('@/views/excel/export-excel-tag'),
-      //   name: 'ExportExcel',
-      //   meta: { title: 'selectExcelTag' }
-      // },
       {
         path: 'export-selected-excel-place',
         component: () => import('@/views/excel/select-excel-place'),
@@ -267,18 +169,6 @@ export const asyncRoutes = [
         name: 'SelectExcelTag',
         meta: { title: 'selectExcelTag' }
       }
-      // {
-      //   path: 'export-merge-header',
-      //   component: () => import('@/views/excel/merge-header'),
-      //   name: 'MergeHeader',
-      //   meta: { title: 'mergeHeader' }
-      // },
-      // {
-      //   path: 'upload-excel',
-      //   component: () => import('@/views/excel/upload-excel'),
-      //   name: 'UploadExcel',
-      //   meta: { title: 'uploadExcel' }
-      // }
     ]
   },
 

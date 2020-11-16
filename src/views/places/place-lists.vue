@@ -30,23 +30,16 @@
           <svg-icon v-for="n in +row.privacy+1" :key="n" icon-class="star" class="meta-item__icon" />
         </template>
       </el-table-column>
-      <el-table-column :label="$t('placeList.name')" width="110px" align="center">
+      <el-table-column :label="$t('placeList.name')" width="150px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.listName }}</span>
+          <span class="link-type" @click="handleDetail(row)">{{ row.listName }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('placeList.description')" min-width="80px">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleDetail(row)">{{ row.description }}</span>
-          <!-- <el-tag>{{ row.description }}</el-tag> -->
+          <span>{{ row.description }}</span>
         </template>
       </el-table-column>
-      <!-- <el-table-column :label="$t('placeList.coverImageURL')" align="center" width="180px">
-        <template slot-scope="{row}">
-          <span v-if="row.coverImageURL" class="link-type" @click="handleFetchPv(row.pageviews)">{{ row.pageviews }}</span>
-          <span v-else>0</span>
-        </template>
-      </el-table-column> -->
       <el-table-column :label="$t('placeList.createdTime')" width="150px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.createdTime }}</span>
@@ -131,23 +124,13 @@
 
 <script>
 import { createList, testPlaceList, queryPlaceSelectoin, updatePlaceList } from '@/api/article'
-import waves from '@/directive/waves' // waves directive
-import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import waves from '@/directive/waves'
+import Pagination from '@/components/Pagination'
 
 export default {
   name: 'PlacesListTable',
   components: { Pagination },
   directives: { waves },
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    }
-  },
   data() {
     return {
       tableKey: 0,
@@ -186,7 +169,8 @@ export default {
         name: '',
         description: '',
         privacy: undefined,
-        places: null
+        places: null,
+        editors_email: []
       },
       dialogFormVisible: false,
       dialogTimelineVisible: false,
@@ -288,18 +272,24 @@ export default {
           this.temp.createdTime = date + ' ' + time
           this.temp.user_id = 1
           this.temp.user_name = 'Khito'
-          // console.log(this.temp)
-          // console.log(this.createModel)
-          createList(this.createModel).then(() => {
-            this.list.push(this.temp)
-            this.dialogFormVisible = false
-            this.testList()
-            this.$notify({
-              title: '成功',
-              message: '建立成功',
-              type: 'success',
-              duration: 2000
+          this.$confirm(this.$t('member.createCheck'), '提示', {
+            confirmButtonText: this.$t('member.confirm'),
+            cancelButtonText: this.$t('member.cancel'),
+            type: 'warning'
+          }).then(() => {
+            createList(this.createModel).then(() => {
+              this.list.push(this.temp)
+              this.dialogFormVisible = false
+              this.testList()
+              this.$notify({
+                title: '成功',
+                message: '建立成功',
+                type: 'success',
+                duration: 2000
+              })
             })
+          }).catch(() => {
+            this.dialogFormVisible = false
           })
         }
       })
