@@ -106,7 +106,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog :visible.sync="dialogTimelineVisible" width="40%">
+    <el-dialog :title="this.$t('placeList.jounery')" :visible.sync="dialogTimelineVisible" width="40%" center>
       <div class="block">
         <el-timeline>
           <el-timeline-item
@@ -119,6 +119,11 @@
             {{ activity.placeName }}
           </el-timeline-item>
         </el-timeline>
+      </div>
+      <div slot="footer" class="dialog-footer" align="center">
+        <el-button @click="dialogTimelineVisible = false">
+          {{ $t('placeList.close') }}
+        </el-button>
       </div>
     </el-dialog>
   </div>

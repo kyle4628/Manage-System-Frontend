@@ -71,7 +71,7 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getUserList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="30%">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="80px" style="width: 280px; margin-left:20px;">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="90px" style="width: 280px; margin-left:20px;">
         <el-form-item :label="$t('member.name')" prop="name">
           <el-input v-model="temp.name" />
         </el-form-item>
@@ -281,25 +281,33 @@ export default {
           var time = today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds()
           this.temp.createdTime = date + ' ' + time
           this.temp.authority = 1
-          createMember(this.createModel).then((response) => {
-            if (response.status === 1) {
-              this.list.push(this.temp)
-              this.getUserList()
-              this.$notify({
-                title: '成功',
-                message: response.msg,
-                type: 'success',
-                duration: 2000
-              })
-              this.dialogFormVisible = false
-            } else {
-              this.$notify({
-                title: '失敗',
-                message: response.msg,
-                type: 'danger',
-                duration: 2000
-              })
-            }
+          this.$confirm(this.$t('member.createCheck'), '提示', {
+            confirmButtonText: this.$t('member.confirm'),
+            cancelButtonText: this.$t('member.cancel'),
+            type: 'warning'
+          }).then(async() => {
+            createMember(this.createModel).then((response) => {
+              if (response.status === 1) {
+                this.list.push(this.temp)
+                this.getUserList()
+                this.$notify({
+                  title: '成功',
+                  message: response.msg,
+                  type: 'success',
+                  duration: 2000
+                })
+                this.dialogFormVisible = false
+              } else {
+                this.$notify({
+                  title: '失敗',
+                  message: response.msg,
+                  type: 'danger',
+                  duration: 2000
+                })
+              }
+            })
+          }).catch(() => {
+            this.dialogFormVisible = false
           })
         }
       })

@@ -25,7 +25,7 @@
           <span>{{ row.type }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('place.phone')" width="110px" align="center">
+      <el-table-column :label="$t('place.phone')" width="120px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.phone }}</span>
         </template>
@@ -56,7 +56,7 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="queryInfo" />
 
-    <el-dialog :label="dialogTitle[detail]" :visible.sync="dialogFormVisible" width="40%">
+    <el-dialog :visible.sync="dialogFormVisible" width="40%">
       <h3>{{ $t('place.detail') }}</h3>
       <el-tabs v-model="activeName" type="card">
         <el-tab-pane :label="$t('place.tagTitle')" name="first">
@@ -146,9 +146,6 @@ export default {
       total: 0,
       listLoading: true,
       activeName: 'first',
-      dialogTitle: {
-        detail: this.$t('place.detail')
-      },
       listQuery: {
         page: 1,
         limit: 100,
@@ -196,8 +193,6 @@ export default {
       this.tagList = Object.assign([], row.tagInfo)
       this.placeList = Object.assign([], row.listInfo)
       this.activeName = 'first'
-      // console.log(typeof (this.tagList))
-      // console.log(this.placeList)
       this.dialogFormVisible = true
     },
     getSortClass: function(key) {

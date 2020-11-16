@@ -133,7 +133,10 @@ export default {
     nameRule: '此項目必填',
     emailRule: '此項目必填',
     passwordRule: '此項目必填',
-    authorityRule: '此項目必填'
+    authorityRule: '此項目必填',
+    createCheck: '確定要新增?',
+    confirm: '確定',
+    cancel: '取消'
   },
   tag: {
     searchTitle: '請輸入項目',
@@ -194,7 +197,9 @@ export default {
     addPlace: '加入地點',
     add: '新增',
     edit: '編輯',
-    delete: '刪除'
+    delete: '刪除',
+    close: '關閉',
+    jounery: '清單行程'
   },
   table: {
     dynamicTips1: '固定表头, 按照表头顺序排序',

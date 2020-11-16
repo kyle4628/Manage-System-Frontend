@@ -5,36 +5,36 @@
     <el-button :loading="downloadLoading" style="margin-bottom:20px" type="primary" icon="el-icon-document" @click="handleDownload">
       {{ $t('excel.selectedExport') }}
     </el-button>
-    <a href="https://panjiachen.github.io/vue-element-admin-site/feature/component/excel.html" target="_blank" style="margin-left:15px;">
+    <!-- <a href="https://panjiachen.github.io/vue-element-admin-site/feature/component/excel.html" target="_blank" style="margin-left:15px;">
       <el-tag type="info">Documentation</el-tag>
-    </a>
+    </a> -->
     <el-table
       ref="multipleTable"
       v-loading="listLoading"
       :data="list"
-      element-loading-text="拼命加载中"
+      element-loading-text="傳輸中"
       border
       fit
       highlight-current-row
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" align="center" />
-      <el-table-column align="center" label="Id" width="95">
+      <el-table-column align="center" label="編號" width="95">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column label="Title">
+      <el-table-column label="標籤名稱" width="300">
         <template slot-scope="scope">
-          {{ scope.row.title }}
+          {{ scope.row.key }}
         </template>
       </el-table-column>
-      <el-table-column label="Author" width="110" align="center">
+      <el-table-column label="使用數量" width="110" align="center">
         <template slot-scope="scope">
-          <el-tag>{{ scope.row.author }}</el-tag>
+          <el-tag :type="scope.row.count>10?'danger':'success'">{{ scope.row.count }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Readings" width="115" align="center">
+      <!-- <el-table-column label="Readings" width="115" align="center">
         <template slot-scope="scope">
           {{ scope.row.pageviews }}
         </template>
@@ -44,13 +44,14 @@
           <i class="el-icon-time" />
           <span>{{ scope.row.display_time }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
   </div>
 </template>
 
 <script>
-import { fetchList } from '@/api/article'
+// import { fetchList } from '@/api/article'
+import { get_tag_count } from '@/api/user'
 
 export default {
   name: 'SelectExcel',
@@ -69,10 +70,15 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
-        this.list = response.data.items
+      get_tag_count().then(response => {
+        this.list = response.data
         this.listLoading = false
-      })
+      }
+      )
+      // fetchList(this.listQuery).then(response => {
+      //   this.list = response.data.items
+      //   this.listLoading = false
+      // })
     },
     handleSelectionChange(val) {
       this.multipleSelection = val

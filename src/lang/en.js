@@ -143,7 +143,10 @@ export default {
     nameRule: 'Name is required',
     emailRule: 'Email is required',
     passwordRule: 'Password is required',
-    authorityRule: 'Authority is required'
+    authorityRule: 'Authority is required',
+    createCheck: 'Are you sure to create?',
+    confirm: 'Confirm',
+    cancel: 'Cancel'
   },
   tag: {
     searchTitle: 'Search',
@@ -204,7 +207,9 @@ export default {
     addPlace: 'Add place',
     add: 'Create',
     edit: 'Edit',
-    delete: 'Delete'
+    delete: 'Delete',
+    close: 'Close',
+    jounery: 'Jounery'
   },
   table: {
     dynamicTips1: 'Fixed header, sorted by header order',

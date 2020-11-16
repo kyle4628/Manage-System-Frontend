@@ -31,7 +31,7 @@
       </el-table-column>
       <el-table-column label="權限" width="160" align="center">
         <template slot-scope="scope">
-          <el-tag>{{ scope.row.privacy }}</el-tag>
+          <el-tag>{{ listPrivacyMap[scope.row.privacy].name }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="敘述" width="400" align="center">
@@ -39,7 +39,7 @@
           {{ scope.row.description }}
         </template>
       </el-table-column>
-      <el-table-column align="建立時間" label="PDate" width="220">
+      <el-table-column align="center" label="建立時間" width="220">
         <template slot-scope="scope">
           <i class="el-icon-time" />
           <span>{{ scope.row.createdTime }}</span>
@@ -51,7 +51,8 @@
 
 <script>
 // import { fetchList } from '@/api/article'
-// import { createList, testPlaceList, queryPlaceSelectoin, updatePlaceList } from '@/api/article'
+import { testPlaceList } from '@/api/article'
+
 export default {
   name: 'SelectExcel',
   data() {
@@ -65,6 +66,14 @@ export default {
     }
   },
   computed: {
+    listPrivacyMap() {
+      const listPrivacy = {
+        1: { name: this.$t('placeList.public') },
+        2: { name: this.$t('placeList.private') },
+        3: { name: this.$t('placeList.hito') }
+      }
+      return listPrivacy
+    }
   },
   created() {
     this.fetchData()
@@ -72,11 +81,11 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true
-      // testPlaceList().then(response => {
-      //   this.list = response.data
-      //   this.total = response.total
-      //   this.listLoading = false
-      // })
+      testPlaceList().then(response => {
+        this.list = response.data
+        this.total = response.total
+        this.listLoading = false
+      })
       // fetchList(this.listQuery).then(response => {
       //   this.list = response.data.items
       //   this.listLoading = false
@@ -98,7 +107,7 @@ export default {
         this.downloadLoading = true
         import('@/vendor/Export2Excel').then(excel => {
           const tHeader = ['清單編號', '名稱', '權限', '敘述', '建立時間']
-          const filterVal = ['id', 'listName', 'privacy', 'description', 'createdTime']
+          const filterVal = ['id', 'listName', 'privacy', 'updatedTime', 'createdTime']
           const list = this.multipleSelection
           const data = this.formatJson(filterVal, list)
           excel.export_json_to_excel({
