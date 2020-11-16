@@ -86,7 +86,7 @@
     >
       <el-form ref="dataForm" :model="temp" label-position="left" label-width="110px" style="width: 300px; margin-left:10px;">
         <el-form-item :label="$t('tag.placeName')" :class="'is-required'" prop="placeName" :required="!isPlaceSelected">
-          <el-select v-model="updateModel.place_id" class="filter-item" placeholder="Please select">
+          <el-select v-model="temp.place_id" class="filter-item" placeholder="Please select">
             <el-option v-for="item in placeSelection" :key="item.place_id" :label="item.name" :value="item.place_id" />
           </el-select>
         </el-form-item>
@@ -201,6 +201,7 @@ export default {
       return !!this.temp.tag_id
     },
     isPlaceSelected: function() {
+      console.log(this.temp.place_id)
       return !!this.temp.place_id
     }
   },
@@ -282,7 +283,7 @@ export default {
           this.$notify({
             title: '失敗',
             message: '新增失敗',
-            type: 'danger',
+            type: 'fail',
             duration: 2000
           })
         }
