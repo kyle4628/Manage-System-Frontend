@@ -71,7 +71,7 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getUserList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="30%">
-      <el-button type="success" plain style="opacity: 0" @click="demoTemp">Demo</el-button>
+      <el-button v-if="dialogStatus==='create'" type="success" plain style="opacity: 0" @click="demoTemp">Demo</el-button>
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="90px" style="width: 280px; margin-left:20px;">
         <el-form-item :label="$t('member.name')" prop="name">
           <el-input v-model="temp.name" />
@@ -136,13 +136,12 @@ export default {
       listLoading: true,
       listQuery: {
         page: 1,
-        limit: 20,
+        limit: 50,
         importance: undefined,
         title: undefined,
         type: undefined,
         sort: '+id'
       },
-      searchItem: [this.$t('member.name'), this.$t('member.email')],
       sortOptions: [{ label: this.$t('common.idAscending'), key: '+id' }, { label: this.$t('common.idDescending'), key: '-id' }],
       showReviewer: false,
       temp: {
@@ -160,14 +159,17 @@ export default {
         password: ''
       },
       dialogFormVisible: false,
-      dialogStatus: '',
-      textMap: {
-        update: this.$t('member.edit'),
-        create: this.$t('member.add')
-      }
+      dialogStatus: ''
     }
   },
   computed: {
+    textMap() {
+      const title = {
+        update: this.$t('member.edit'),
+        create: this.$t('member.add')
+      }
+      return title
+    },
     authorityText() {
       const memberAuthority = {
         0: { name: this.$t('member.administrator') },

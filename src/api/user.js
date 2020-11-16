@@ -27,7 +27,8 @@ export function queryUser() {
   return request({
     url: '/query/get_user_list',
     method: 'post',
-    baseURL: 'http://localhost:57680',
+    // baseURL: 'http://localhost:57680',
+    baseURL: 'https://fuenml.azurewebsites.net/',
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
       user_id: localStorage.getItem('user_id')
@@ -44,7 +45,8 @@ export function userLogin(data) {
       withCredentials: true
     },
     contentType: 'application/json',
-    baseURL: 'http://localhost:57680'
+    // baseURL: 'http://localhost:57680',
+    baseURL: 'https://fuenml.azurewebsites.net/'
   })
 }
 
@@ -56,7 +58,8 @@ export function userLogout() {
       withCredentials: true
     },
     contentType: 'application/json',
-    baseURL: 'http://localhost:57680'
+    // baseURL: 'http://localhost:57680',
+    baseURL: 'https://fuenml.azurewebsites.net/'
   })
 }
 
@@ -68,7 +71,8 @@ export function userTest() {
       withCredentials: true
     },
     contentType: 'application/json',
-    baseURL: 'http://localhost:57680'
+    // baseURL: 'http://localhost:57680',
+    baseURL: 'https://fuenml.azurewebsites.net/'
   })
 }
 
@@ -80,7 +84,8 @@ export function get_user_growth() {
       withCredentials: true
     },
     contentType: 'application/json',
-    baseURL: 'http://localhost:57680'
+    // baseURL: 'http://localhost:57680',
+    baseURL: 'https://fuenml.azurewebsites.net/'
   })
 }
 export function get_all_data() {
@@ -91,7 +96,8 @@ export function get_all_data() {
       withCredentials: true
     },
     contentType: 'application/json',
-    baseURL: 'http://localhost:57680'
+    // baseURL: 'http://localhost:57680',
+    baseURL: 'https://fuenml.azurewebsites.net/'
   })
 }
 export function get_tag_count() {
@@ -102,7 +108,8 @@ export function get_tag_count() {
       withCredentials: true
     },
     contentType: 'application/json',
-    baseURL: 'http://localhost:57680'
+    // baseURL: 'http://localhost:57680',
+    baseURL: 'https://fuenml.azurewebsites.net/'
   })
 }
 export function get_tag_event_count() {
@@ -113,7 +120,8 @@ export function get_tag_event_count() {
       withCredentials: true
     },
     contentType: 'application/json',
-    baseURL: 'http://localhost:57680'
+    // baseURL: 'http://localhost:57680',
+    baseURL: 'https://fuenml.azurewebsites.net/'
   })
 }
 export function get_place_tag_count() {
@@ -124,7 +132,8 @@ export function get_place_tag_count() {
       withCredentials: true
     },
     contentType: 'application/json',
-    baseURL: 'http://localhost:57680'
+    // baseURL: 'http://localhost:57680',
+    baseURL: 'https://fuenml.azurewebsites.net/'
   })
 }
 
@@ -137,7 +146,8 @@ export function sendEmail(data) {
       withCredentials: true
     },
     contentType: 'application/json',
-    baseURL: 'http://localhost:57680'
+    // baseURL: 'http://localhost:57680',
+    baseURL: 'https://fuenml.azurewebsites.net/'
   })
 }
 

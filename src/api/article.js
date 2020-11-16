@@ -52,7 +52,8 @@ export function queryTagList() {
   return request({
     url: '/query/get_tag_list',
     method: 'post',
-    baseURL: 'http://localhost:57680',
+    // baseURL: 'http://localhost:57680',
+    baseURL: 'https://fuenml.azurewebsites.net/',
     headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }
   })
 }
@@ -61,7 +62,8 @@ export function queryPlaceInfoList() {
   return request({
     url: '/query/get_place_info',
     method: 'post',
-    baseURL: 'http://localhost:57680',
+    // baseURL: 'http://localhost:57680',
+    baseURL: 'https://fuenml.azurewebsites.net/',
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
       user_id: localStorage.getItem('user_id')
@@ -73,7 +75,8 @@ export function queryPlaceSelectoin() {
   return request({
     url: '/query/get_place_selection',
     method: 'post',
-    baseURL: 'http://localhost:57680'
+    // baseURL: 'http://localhost:57680',
+    baseURL: 'https://fuenml.azurewebsites.net/'
   })
 }
 
@@ -81,7 +84,8 @@ export function queryTagSelectoin() {
   return request({
     url: '/query/get_tag_selection',
     method: 'post',
-    baseURL: 'http://localhost:57680'
+    // baseURL: 'http://localhost:57680',
+    baseURL: 'https://fuenml.azurewebsites.net/'
   })
 }
 
@@ -89,7 +93,8 @@ export function testPlaceList() {
   return request({
     url: '/query/get_place_list',
     method: 'post',
-    baseURL: 'http://localhost:57680',
+    // baseURL: 'http://localhost:57680',
+    baseURL: 'https://fuenml.azurewebsites.net/',
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
       user_id: localStorage.getItem('user_id')
@@ -102,7 +107,8 @@ export function createMember(data) {
     url: '/auth/register',
     method: 'post',
     data,
-    baseURL: 'http://localhost:57680'
+    // baseURL: 'http://localhost:57680',
+    baseURL: 'https://fuenml.azurewebsites.net/'
     // headers: {
     //   Authorization: 'Bearer ' + localStorage.getItem('token'),
     //   user_id: localStorage.getItem('user_id')
@@ -115,7 +121,8 @@ export function createTagRelation(data) {
     url: '/user/modify_place_tag',
     method: 'post',
     data,
-    baseURL: 'http://localhost:57680',
+    // baseURL: 'http://localhost:57680',
+    baseURL: 'https://fuenml.azurewebsites.net/',
     headers: {
       session_id: 1
     }
@@ -127,7 +134,8 @@ export function createList(data) {
     url: '/user/create_list',
     method: 'post',
     data,
-    baseURL: 'http://localhost:57680',
+    // baseURL: 'http://localhost:57680',
+    baseURL: 'https://fuenml.azurewebsites.net/',
     headers: {
       session_id: 1
     }
@@ -139,7 +147,8 @@ export function updateMember(data) {
     url: '/query/update_member',
     method: 'post',
     data,
-    baseURL: 'http://localhost:57680'
+    // baseURL: 'http://localhost:57680',
+    baseURL: 'https://fuenml.azurewebsites.net/'
     // headers: {
     //   Authorization: 'Bearer ' + localStorage.getItem('token'),
     //   user_id: localStorage.getItem('user_id')
@@ -152,7 +161,8 @@ export function updatePlaceList(data) {
     url: '/query/update_placelist',
     method: 'post',
     data,
-    baseURL: 'http://localhost:57680',
+    // baseURL: 'http://localhost:57680',
+    baseURL: 'https://fuenml.azurewebsites.net/',
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
       user_id: localStorage.getItem('user_id')
