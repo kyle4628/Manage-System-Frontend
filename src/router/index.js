@@ -8,8 +8,6 @@ import Layout from '@/layout'
 
 /* Router Modules */
 import chartsRouter from './modules/charts'
-// import tableRouter from './modules/table'
-// import nestedRouter from './modules/nested'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -113,12 +111,12 @@ export const asyncRoutes = [
     path: '/places',
     component: Layout,
     redirect: '/places/place',
-    alwaysShow: true, // will always show the root menu
+    alwaysShow: true,
     name: 'Places',
     meta: {
       title: 'places',
       icon: 'list',
-      roles: ['admin', 'editor'] // you can set roles in root nav
+      roles: ['admin', 'editor']
     },
     children: [
       {

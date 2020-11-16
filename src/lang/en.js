@@ -31,7 +31,9 @@ export default {
     dashboard: 'Dashboard',
     logOut: 'Log Out',
     theme: 'Theme',
-    size: 'Global Size'
+    size: 'Global Size',
+    screenfull: 'Full Screen',
+    langSelect: 'Language'
   },
   login: {
     title: 'Login Form',

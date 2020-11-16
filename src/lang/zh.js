@@ -27,7 +27,9 @@ export default {
   navbar: {
     dashboard: '首頁',
     logOut: '使用者登出',
-    size: '布局大小'
+    size: '布局大小',
+    screenfull: '全螢幕',
+    langSelect: '語言切換'
   },
   login: {
     title: '系統登入',
