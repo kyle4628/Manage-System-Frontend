@@ -140,3 +140,15 @@ export function sendEmail(data) {
     baseURL: 'http://localhost:57680'
   })
 }
+
+export function userEventCount() {
+  return request({
+    url: '/query/get_user_event_count',
+    method: 'post',
+    xhrFields: {
+      withCredentials: true
+    },
+    contentType: 'application/json',
+    baseURL: 'http://localhost:57680'
+  })
+}

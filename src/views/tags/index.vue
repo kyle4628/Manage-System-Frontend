@@ -80,10 +80,10 @@
     />
 
     <el-dialog
+      :title="this.$t('tag.add')"
       :visible.sync="dialogCreateFormVisible"
       width="25%"
     >
-      <h3>Create</h3>
       <el-form ref="dataForm" :model="temp" label-position="left" label-width="110px" style="width: 300px; margin-left:10px;">
         <el-form-item :label="$t('tag.placeName')" :class="'is-required'" prop="placeName" :required="!isPlaceSelected">
           <el-select v-model="updateModel.place_id" class="filter-item" placeholder="Please select">
@@ -110,10 +110,10 @@
     </el-dialog>
 
     <el-dialog
+      :title="this.$t('tag.edit')"
       :visible.sync="dialogUpdateFormVisible"
       width="25%"
     >
-      <h3>Update</h3>
       <el-form ref="dataForm" :model="updateModel" label-position="left" label-width="110px" style="width: 300px; margin-left:10px;">
         <el-form-item :label="$t('tag.placeName')" :class="'is-required'" prop="placeName" :required="!isPlaceSelected">
           <el-select v-model="updateModel.place_id" class="filter-item" placeholder="Please select">
