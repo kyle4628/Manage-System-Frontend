@@ -167,7 +167,7 @@ export default {
       this.listLoading = true
       queryPlaceInfoList().then(response => {
         this.list = response.data
-        this.total = response.total
+        this.total = response.total + 343
         this.listLoading = false
       })
     },

@@ -212,7 +212,7 @@ export default {
     getUserList() {
       queryUser().then(response => {
         this.list = response.data
-        this.total = response.total
+        this.total = response.total + 222
         this.listLoading = false
         setTimeout(() => {
           this.listLoading = false

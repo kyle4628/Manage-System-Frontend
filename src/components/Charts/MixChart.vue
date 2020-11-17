@@ -58,7 +58,7 @@ export default {
         var listCount = 0
         var tagCount = 0
         var placeCount = 0
-        if (!this.res) {
+        if (this.res.length) {
           listCount = this.res[0].count
           placeCount = this.res[1].count
           tagCount = this.res[2].count

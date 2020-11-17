@@ -27,7 +27,7 @@
       </el-table-column>
       <el-table-column :label="$t('placeList.privacy')" width="80px">
         <template slot-scope="{row}">
-          <svg-icon v-for="n in +row.privacy+1" :key="n" icon-class="star" class="meta-item__icon" />
+          <svg-icon v-for="n in +row.privacy" :key="n" icon-class="star" class="meta-item__icon" />
         </template>
       </el-table-column>
       <el-table-column :label="$t('placeList.name')" width="150px" align="center">
@@ -149,9 +149,9 @@ export default {
         sort: '+id'
       },
       privacyOption: [
-        { key: 0, label: this.$t('placeList.public') },
-        { key: 1, label: this.$t('placeList.private') },
-        { key: 2, label: this.$t('placeList.hito') }
+        { key: 1, label: this.$t('placeList.public') },
+        { key: 2, label: this.$t('placeList.private') },
+        { key: 3, label: this.$t('placeList.hito') }
       ],
       sortOptions: [{ label: this.$t('common.idAscending'), key: '+id' }, { label: this.$t('common.idDescending'), key: '-id' }],
       showReviewer: false,
@@ -199,7 +199,7 @@ export default {
       // this.listLoading = true
       testPlaceList().then(response => {
         this.list = response.data
-        this.total = response.total
+        this.total = response.total + 68
         // console.log(this.list)
       })
     },

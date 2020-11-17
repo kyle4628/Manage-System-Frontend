@@ -93,8 +93,8 @@ export function testPlaceList() {
   return request({
     url: '/query/get_place_list',
     method: 'post',
-    baseURL: 'http://localhost:57680',
-    // baseURL: 'https://fuenml.azurewebsites.net/',
+    // baseURL: 'http://localhost:57680',
+    baseURL: 'https://fuenml.azurewebsites.net/',
     headers: {
       Authorization: 'Bearer ' + localStorage.getItem('token'),
       user_id: localStorage.getItem('user_id')
