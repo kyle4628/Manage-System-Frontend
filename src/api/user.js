@@ -159,6 +159,7 @@ export function userEventCount() {
       withCredentials: true
     },
     contentType: 'application/json',
-    baseURL: 'http://localhost:57680'
+    // baseURL: 'http://localhost:57680',
+    baseURL: 'https://fuenml.azurewebsites.net/'
   })
 }

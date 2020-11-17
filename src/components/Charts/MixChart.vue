@@ -55,6 +55,14 @@ export default {
       }())
       userEventCount().then(response => {
         this.res = response.data
+        var listCount = 0
+        var tagCount = 0
+        var placeCount = 0
+        if (!this.res) {
+          listCount = this.res[0].count
+          placeCount = this.res[1].count
+          tagCount = this.res[2].count
+        }
         // console.log(this.res)
         this.chart.setOption({
           backgroundColor: '#344b58',
@@ -187,7 +195,7 @@ export default {
                 }
               }
             },
-            data: [this.res[0].count + 709, this.res[0].count + 1917, this.res[0].count + 2455]
+            data: [(listCount) + 709, (listCount) + 1917, (listCount) + 2455]
           },
 
           {
@@ -207,7 +215,7 @@ export default {
                 }
               }
             },
-            data: [this.res[1].count + 327, this.res[1].count + 1776, this.res[1].count + 507]
+            data: [(placeCount) + 327, (placeCount) + 1776, (placeCount) + 507]
           }, {
             name: '標籤',
             type: 'line',
@@ -227,7 +235,7 @@ export default {
                 }
               }
             },
-            data: [this.res[2].count + 1036, this.res[2].count + 3693, this.res[2].count + 2962]
+            data: [(tagCount) + 1036, (tagCount) + 3693, (tagCount) + 2962]
           }
           ]
         })

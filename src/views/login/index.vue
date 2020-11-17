@@ -147,27 +147,11 @@ export default {
           this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
           this.loading = false
         })
-      // this.$refs.loginForm.validate(valid => {
-      //   if (valid) {
-      //     this.loading = true
-      //     this.$store.dispatch('user/login', this.loginForm)
-      //       .then(() => {
-      //         this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
-      //         this.loading = false
-      //       })
-      //       .catch(() => {
-      //         this.loading = false
-      //       })
-      //   } else {
-      //     console.log('error submit!!')
-      //     return false
-      //   }
-      // })
     },
     loginWithToken() {
       const tempData = Object.assign({}, this.temp)
       // console.log(this.temp)
-      axios.post('http://localhost:57680/token/login', // https://fuenml.azurewebsites.net/ http://localhost:57680/token/login
+      axios.post('https://fuenml.azurewebsites.net/token/login', // https://fuenml.azurewebsites.net/token/login http://localhost:57680/token/login
         tempData)
         .then((response) => {
           // console.log('response', response)
