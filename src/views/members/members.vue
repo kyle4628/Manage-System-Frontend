@@ -364,7 +364,7 @@ export default {
       // const tempData = Object.assign({}, this.temp)
       this.sendEmailobj.toEmail = this.temp.email
       sendEmail(this.sendEmailobj).then(response => {
-        console.log(response)
+        // console.log(response)
         if (response.status === 1) {
           this.$notify({
             title: '成功',

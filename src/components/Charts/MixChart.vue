@@ -55,7 +55,7 @@ export default {
       }())
       userEventCount().then(response => {
         this.res = response.data
-        console.log(this.res)
+        // console.log(this.res)
         this.chart.setOption({
           backgroundColor: '#344b58',
           title: {

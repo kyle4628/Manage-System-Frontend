@@ -81,8 +81,8 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        username: 'Khito',
+        password: 'behkhito'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -166,11 +166,11 @@ export default {
     },
     loginWithToken() {
       const tempData = Object.assign({}, this.temp)
-      console.log(this.temp)
-      axios.post('http://localhost:57680/token/login',
+      // console.log(this.temp)
+      axios.post('http://localhost:57680/token/login', // https://fuenml.azurewebsites.net/ http://localhost:57680/token/login
         tempData)
         .then((response) => {
-          console.log('response', response)
+          // console.log('response', response)
           if (response.data.Result === true) {
             localStorage.setItem('token', response.data.token)
             localStorage.setItem('user_id', response.data.user_id)
@@ -188,7 +188,7 @@ export default {
     testList() {
       // this.listLoading = true
       testPlaceList().then(response => {
-        console.log(response.data)
+        // console.log(response.data)
       })
     },
     getOtherQuery(query) {

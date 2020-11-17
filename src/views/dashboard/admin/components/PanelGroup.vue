@@ -77,7 +77,7 @@ export default {
     initChart() {
       get_all_data().then(response => {
         const res = response.data
-        console.log(response.data)
+        // console.log(response.data)
         this.userCount = res[0] + 222
         this.listCount = res[1] + 68
         this.placeCount = res[2] + 343

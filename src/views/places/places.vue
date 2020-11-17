@@ -148,7 +148,7 @@ export default {
       activeName: 'first',
       listQuery: {
         page: 1,
-        limit: 100,
+        limit: 50,
         importance: undefined,
         title: undefined,
         type: undefined,

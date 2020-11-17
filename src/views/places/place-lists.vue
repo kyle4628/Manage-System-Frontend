@@ -141,7 +141,7 @@ export default {
       listLoading: true,
       listQuery: {
         page: 1,
-        limit: 20,
+        limit: 50,
         user_id: undefined,
         privacy: undefined,
         listName: undefined,

@@ -1,6 +1,6 @@
 
 const tokens = {
-  admin: {
+  Khito: {
     token: 'admin-token'
   },
   editor: {

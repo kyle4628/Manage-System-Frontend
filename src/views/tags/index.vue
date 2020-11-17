@@ -201,7 +201,6 @@ export default {
       return !!this.temp.tag_id
     },
     isPlaceSelected: function() {
-      console.log(this.temp.place_id)
       return !!this.temp.place_id
     }
   },
@@ -264,7 +263,6 @@ export default {
       })
     },
     createData() {
-      console.log('this.temp ', this.temp)
       // this.$refs['dataForm'].validate(valid => {
       //   if (valid) {
       createTagRelation(this.temp).then((response) => {

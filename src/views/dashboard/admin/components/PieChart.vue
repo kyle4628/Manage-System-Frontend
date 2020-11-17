@@ -51,7 +51,7 @@ export default {
         this.placeTagCount = response.data
         this.placeTagCountValue = []
         this.placeTagCountName = []
-        console.log(this.placeTagCount)
+        // console.log(this.placeTagCount)
         this.placeTagCount.forEach(item => {
           const x = { value: item.count, name: item.key }
           this.placeTagCountValue.push(x)
@@ -61,7 +61,7 @@ export default {
 
         // this.placeTagCountValue=this.placeTagCount.map(item => Object.values(item)[0]);
         this.placeTagCountName = this.placeTagCount.map(item => Object.values(item)[1])
-        console.log(this.placeTagCountName)
+        // console.log(this.placeTagCountName)
         // console.log(Object.values(this.listUserGrowthKey))
         const datas = { res: this.placeTagCountValue, name: this.placeTagCountName }
         return datas
