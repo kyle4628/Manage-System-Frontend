@@ -263,30 +263,34 @@ export default {
       })
     },
     createData() {
-      // this.$refs['dataForm'].validate(valid => {
-      //   if (valid) {
-      createTagRelation(this.temp).then((response) => {
-        // this.list.unshift(this.temp)
-        if (response.status === 1) {
-          this.dialogCreateFormVisible = false
-          this.queryList()
-          this.$notify({
-            title: '成功',
-            message: '新增成功',
-            type: 'success',
-            duration: 2000
-          })
-        } else {
-          this.dialogCreateFormVisible = false
-          this.$notify({
-            title: '失敗',
-            message: '新增失敗',
-            type: 'fail',
-            duration: 2000
-          })
-        }
-        //   })
-        // }
+      this.$confirm('確定新增?', '提示', {
+        confirmButtonText: '確定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        createTagRelation(this.temp).then((response) => {
+          // this.list.unshift(this.temp)
+          if (response.status === 1) {
+            this.dialogCreateFormVisible = false
+            this.queryList()
+            this.$notify({
+              title: '成功',
+              message: '新增成功',
+              type: 'success',
+              duration: 2000
+            })
+          } else {
+            this.dialogCreateFormVisible = false
+            this.$notify({
+              title: '失敗',
+              message: '新增失敗',
+              type: 'fail',
+              duration: 2000
+            })
+          }
+        })
+      }).catch(() => {
+        this.dialogCreateFormVisible = false
       })
     },
     handleUpdate(row) {

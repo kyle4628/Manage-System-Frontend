@@ -296,6 +296,7 @@ export default {
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row)
+      console.log(this.temp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -305,18 +306,35 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          const tempData = Object.assign({}, this.temp)
-          updatePlaceList(tempData).then(() => {
-            const index = this.list.findIndex(v => v.id === this.temp.id)
-            this.list.splice(index, 1, this.temp)
-            this.dialogFormVisible = false
-            this.testList()
-            this.$notify({
-              title: '成功',
-              message: '更新成功',
-              type: 'success',
-              duration: 2000
+          this.$confirm('確定更新?', '提示', {
+            confirmButtonText: '確定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            const tempData = Object.assign({}, this.temp)
+            updatePlaceList(tempData).then((response) => {
+              if (response.message === 'success') {
+                const index = this.list.findIndex(v => v.id === this.temp.id)
+                this.list.splice(index, 1, this.temp)
+                this.dialogFormVisible = false
+                this.testList()
+                this.$notify({
+                  title: '成功',
+                  message: '更新成功',
+                  type: 'success',
+                  duration: 2000
+                })
+              } else {
+                this.$notify({
+                  title: '失敗',
+                  message: 'Update Fail',
+                  type: 'danger',
+                  duration: 2000
+                })
+              }
             })
+          }).catch(() => {
+            this.dialogFormVisible = false
           })
         }
       })
