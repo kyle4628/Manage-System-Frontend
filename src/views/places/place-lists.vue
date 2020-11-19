@@ -313,7 +313,7 @@ export default {
           }).then(() => {
             const tempData = Object.assign({}, this.temp)
             updatePlaceList(tempData).then((response) => {
-              if (response.message === 'success') {
+              if (response.msg === 'success') {
                 const index = this.list.findIndex(v => v.id === this.temp.id)
                 this.list.splice(index, 1, this.temp)
                 this.dialogFormVisible = false
@@ -328,7 +328,7 @@ export default {
                 this.$notify({
                   title: '失敗',
                   message: 'Update Fail',
-                  type: 'danger',
+                  type: 'error',
                   duration: 2000
                 })
               }
