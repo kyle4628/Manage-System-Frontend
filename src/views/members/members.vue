@@ -19,7 +19,7 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column :label="$t('member.id')" prop="id" sortable="custom" align="center" width="90" :class-name="getSortClass('id')">
+      <el-table-column :label="$t('member.id')" prop="id" align="center" width="90" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
         </template>

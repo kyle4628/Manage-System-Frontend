@@ -25,7 +25,6 @@
       <el-table-column
         :label="$t('tag.id')"
         prop="id"
-        sortable="custom"
         align="center"
         width="150"
         :class-name="getSortClass('id')"
@@ -95,9 +94,9 @@
             <el-option v-for="item in tagSelection" :key="item.tagId" :label="item.tagName" :value="item.tagId" />
           </el-select>
         </el-form-item>
-        <el-form-item :label="$t('tag.userName')">
+        <!-- <el-form-item :label="$t('tag.userName')">
           <el-input v-model="temp.user_name" disabled />
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
       <div slot="footer" class="dialog-footer" align="center">
         <el-button @click="dialogCreateFormVisible = false">
@@ -185,7 +184,7 @@ export default {
       updateModel: {
         place_id: undefined,
         tag_id: undefined,
-        user_name: ''
+        user_name: 'Khito'
       },
       dialogCreateFormVisible: false,
       dialogUpdateFormVisible: false,

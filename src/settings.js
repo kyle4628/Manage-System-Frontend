@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'Khido Management System',
+  title: 'Khito Management System',
 
   /**
    * @type {boolean} true | false

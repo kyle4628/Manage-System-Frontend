@@ -1,7 +1,7 @@
 import defaultSettings from '@/settings'
 import i18n from '@/lang'
 
-const title = defaultSettings.title || 'Khido Management System'
+const title = defaultSettings.title || 'Khito Management System'
 
 export default function getPageTitle(key) {
   const hasKey = i18n.te(`route.${key}`)
