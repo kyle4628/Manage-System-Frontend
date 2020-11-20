@@ -35,12 +35,12 @@
           <span>{{ row.address }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('place.longitude')" width="200px" align="center">
+      <el-table-column :label="$t('place.longitude')" width="130px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.longitude }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('place.latitude')" width="200px" align="center">
+      <el-table-column :label="$t('place.latitude')" width="130px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.latitude }}</span>
         </template>

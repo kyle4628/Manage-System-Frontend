@@ -257,9 +257,9 @@ export default {
       }
     },
     demoTemp() {
-      this.temp.name = 'Mike'
-      this.temp.email = 'Mike@khito.co'
-      this.temp.password = 'Mike1234'
+      this.temp.name = 'Jack'
+      this.temp.email = 'Jack@khito.co'
+      this.temp.password = 'Jack1234'
     },
     resetCreateModel() {
       this.createModel = {

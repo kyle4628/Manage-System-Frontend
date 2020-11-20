@@ -1,11 +1,11 @@
 <template>
   <el-table :data="list" style="width: 100%;padding-top: 15px;">
-    <el-table-column label="標籤名稱" width="170">
+    <el-table-column label="標籤名稱" width="130">
       <template slot-scope="scope">
         {{ scope.row.key | orderNoFilter }}
       </template>
     </el-table-column>
-    <el-table-column label="搜尋次數" width="195" align="center">
+    <el-table-column label="搜尋次數" width="130" align="center">
       <template slot-scope="scope">
         {{ scope.row.count+169 | toThousandFilter }}
       </template>
@@ -49,7 +49,7 @@ export default {
   methods: {
     fetchData() {
       get_tag_event_count().then(response => {
-        this.list = response.data
+        this.list = response.data.splice(0, 10)
       })
       // transactionList().then(response => {
       //   this.list = response.data.items.slice(0, 8)

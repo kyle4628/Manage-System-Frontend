@@ -66,9 +66,7 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="40%">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="150px" style="width: 400px; margin-left:20px;">
-        <!-- <el-form-item :label="$t('placeList.userId')" prop="timestamp">
-          <el-input v-model="temp.user_id" disabled />
-        </el-form-item> -->
+        <el-button style="opacity: 0" @click="demoList" />
         <el-form-item v-if="dialogStatus==='update'" :label="$t('placeList.userName')">
           <el-input v-model="temp.user_name" :disabled="dialogStatus==='update'" />
         </el-form-item>
@@ -355,6 +353,12 @@ export default {
     getSortClass: function(key) {
       const sort = this.listQuery.sort
       return sort === `+${key}` ? 'ascending' : 'descending'
+    },
+    demoList() {
+      this.temp.listName = 'test'
+      this.temp.privacy = 2
+      this.temp.description = 'test'
+      this.temp.place = [35]
     }
   }
 }

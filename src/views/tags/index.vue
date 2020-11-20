@@ -81,7 +81,7 @@
     <el-dialog
       :title="this.$t('tag.add')"
       :visible.sync="dialogCreateFormVisible"
-      width="25%"
+      width="35%"
     >
       <el-form ref="dataForm" :model="temp" label-position="left" label-width="110px" style="width: 300px; margin-left:10px;">
         <el-form-item :label="$t('tag.placeName')" :class="'is-required'" prop="placeName" :required="!isPlaceSelected">
@@ -111,7 +111,7 @@
     <el-dialog
       :title="this.$t('tag.edit')"
       :visible.sync="dialogUpdateFormVisible"
-      width="25%"
+      width="35%"
     >
       <el-form ref="dataForm" :model="updateModel" label-position="left" label-width="110px" style="width: 300px; margin-left:10px;">
         <el-form-item :label="$t('tag.placeName')" :class="'is-required'" prop="placeName" :required="!isPlaceSelected">
@@ -283,7 +283,7 @@ export default {
             this.$notify({
               title: '失敗',
               message: '新增失敗',
-              type: 'fail',
+              type: 'error',
               duration: 2000
             })
           }
