@@ -82,7 +82,7 @@
           <el-input v-model="temp.description" />
         </el-form-item>
         <el-form-item v-if="dialogStatus==='create'" :label="$t('placeList.addPlace')">
-          <el-select v-model="temp.place" class="filter-item" placeholder="Please select" multiple collapse-tags>
+          <el-select v-model="temp.place" class="filter-item" placeholder="Please select" multiple>
             <el-option v-for="item in placeSelection" :key="item.place_id" :label="item.name" :value="item.place_id" />
           </el-select>
         </el-form-item>
@@ -355,10 +355,10 @@ export default {
       return sort === `+${key}` ? 'ascending' : 'descending'
     },
     demoList() {
-      this.temp.listName = 'test'
+      this.temp.listName = '發現。臺北'
       this.temp.privacy = 2
-      this.temp.description = 'test'
-      this.temp.place = [35]
+      this.temp.description = '挖掘隱藏在臺北巷弄的特色角落'
+      this.temp.place = [22, 26]
     }
   }
 }
